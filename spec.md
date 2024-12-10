@@ -689,18 +689,29 @@ by memory size.
 JPL Compiler Command Line Interface
 -----------------------------------
 
-Every execution of a JPL compiler should print either `Compilation
-succeeded\n` or else `Compilation failed\n` to the standard output
-stream (stdout). Nothing should be printed to the standard error
-stream (stderr).
+Every valid invocation of a JPL compiler should print
+`Compilation failed` or `Compilation succeeded`, followed
+by a colon (`:`), a brief explanation, and a newline.
 
-The compilation should succeed if the input program is legal JPL, and
-in this case the compiler should not print anything else to stdout.
-The compilation should fail if the input program is not legal JPL, in
-which case, in addition to the `Compilation failed` message, an error
-message describing what is wrong with the input program should also be
-printed to stdout. A JPL compiler should produce no other output,
-except in cases described below.
+Examples:
+
+```
+Compilation succeeded: running the code complete
+
+Compilation succeeded
+
+Compilation failed: test.jpl:2:11: Mixed left- and right-types float, int
+
+Compilation failed: test.jpl:5:0: Unknown command beginning with <class 'lexer.Identifier'>
+```
+
+Print to the standard output stream (stdout). Do not print anything to the
+standard error stream (stderr).
+
+Compilation should succeed if the input program is legal JPL. Compilation
+should fail if the input program is not legal JPL, and the explanation should
+describe what is wrong with the input program. A JPL compiler should produce no
+other output, except in cases described below.
 
 A JPL compiler is required to support the following command line options,
 which may occur in any order:
@@ -719,9 +730,9 @@ which may occur in any order:
 
   - `-p`: Perform lexical analysis and parsing only, pretty-printing
     the parsed program back to ASCII text in a format based on
-    s-expressions that is described in your assignments.  In this
+    s-expressions (to be described in homework assignments).  In this
     case, the compilation is considered to be successful if the input
-    program corresponds to the grammar described in your current
+    program corresponds to the grammar described in the current
     assignment; otherwise, the compilation fails.
 
   - `-t`: Perform lexical analysis, parsing, and type checking (but not
@@ -731,14 +742,12 @@ which may occur in any order:
 
 If the command line options to the JPL compiler do not meet these
 requirements, or if the specified file does not exist or cannot be
-accessed, neither `Compilation successful` nor `Compilation failed`
-should be printed, but rather a terse error message should be printed
-before the compiler exits.
+accessed, print a brief error message and exit. Do not print
+`Compilation failed` (and definitely not `Compilation succeeded`).
 
-It is permissible for a JPL compiler to accept additional
-single-letter command line flags. For example, `-d` might be used to
-ask the JPL compiler to produce debugging output. When such a flag is
-specified, it is understood that the JPL compiler is operating outside
-of this spec. Thus, violating the "should produce no other output"
-clause above is acceptable. However, these extra flags must be off by
-default.
+It is permissible for a JPL compiler to accept additional single-letter command
+line flags. For example, `-d` might be used to ask the JPL compiler to produce
+debugging output. When such a flag is specified, it is understood that the JPL
+compiler is operating outside of this spec. Thus, you can print whatever output
+you want. Additional flags must be off by default.
+
