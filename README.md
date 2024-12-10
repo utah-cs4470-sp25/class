@@ -1,14 +1,12 @@
-
-CS 4470: Compilers, Spring 2023
+CS 4470: Compilers, Spring 2025
 ===============================
 
-*Instructor*: Pavel Panchekha, pavpan@cs.utah.edu \
-*Assistant*: Taylor Allred, taylor.c.allred@utah.edu \
-*Lecture*: Mon/Wed 3:00–4:30 in WEB L122 \
-*Appointments*: Pavel: https://shorturl.at/dzDJN; Taylor: https://calendar.app.google/WJaC7S5Nk29Gx8fy6 \
-*Office Hours*: Thu 12:00–1:00 in MEB 3115 \
-*Discord*: https://discord.gg/fHvWXgdFv2 \
-*Github*: https://github.com/utah-cs4470-sp23/class
+*Instructor*: Ben Greenman, benjaminlgreenman@gmail.com \
+*Assistant*: Bhargav Kulkarni, TBD \
+*Lecture*: Mon/Wed 11:50am - 1:10pm in [AEB 350](https://map.utah.edu/index.html?code=AEB) \
+*Office Hours*: TBD \
+*Discord*: TBD \
+*Github*: https://github.com/utah-cs4470-sp25/class
 
 About the Course
 ----------------
@@ -28,6 +26,7 @@ course, you will be able to:
 This is a programming-intensive course: to understand compilers, you
 will you'll write a compiler for a simple language called JPL. Prepare
 to spend a significant amount of time programming.
+
 
 Materials
 ---------
