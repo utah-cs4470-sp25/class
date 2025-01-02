@@ -11,7 +11,7 @@ CS 4470: Compilers, Spring 2025
 Assignments
 ---
 
-TBD
+- [HW1](./hw1)
 
 
 About the Course
