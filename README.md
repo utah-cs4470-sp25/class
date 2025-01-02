@@ -33,6 +33,6 @@ This is a programming-intensive course. Students will write a compiler for a
 simple language called JPL. Prepare to spend a significant amount of time
 programming.
 
-More details on Canvas:
+More on Canvas:
 <https://utah.instructure.com/courses/1021427>
 
