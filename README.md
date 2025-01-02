@@ -2,7 +2,7 @@ CS 4470: Compilers, Spring 2025
 ===============================
 
 *Instructor*: Ben Greenman, benjaminlgreenman@gmail.com \
-*Assistant*: Bhargav Kulkarni, TBD \
+*Assistant*: Bhargav Kulkarni, u1471442@gmail.com \
 *Lecture*: Mon/Wed 11:50am - 1:10pm in [AEB 350](https://map.utah.edu/index.html?code=AEB) \
 *Office Hours*: TBD \
 *Discord*: TBD \
@@ -70,7 +70,7 @@ complete solutions to homework problems or copy huge chunks of code
 there (see the academic misconduct policy below), but short snippets
 are typically find.
 
-You can also join office hours with TA Allred; the time and place is
+You can also join office hours with TA Kulkarni; the time and place is
 given at the top of this syllabus. Office hours are a good way to
 check that you're approaching the homework the right way, get a quick
 code review, or have someone help you out debugging a problem. We
@@ -80,7 +80,7 @@ Allred can answer any questions that show up, or you can help out
 other students if they run into a problem you've seen. This will be
 particularly helpful once we get to generating assembly code.
 
-Finally, you can meet with Prof. Panchekha by appointment, at the time
+Finally, you can meet with Prof. Greenman by appointment, at the time
 and place given at the top of this syllabus. This meeting is a great
 way to do an in-depth code review, clarify anything that's confusing
 or that you didn't understand in class, or discuss any larger issues
