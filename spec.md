@@ -38,7 +38,7 @@ and should not be written in source code.
 
 The keywords are: `array`, `assert`, `bool`, `else`, `false`, `float`,
 `fn`, `if`, `image`, `int`, `let`, `print`, `read`, `return`, `show`,
-`sum`, `then`, `time`, `to`, `true`, `type`, `write`.
+`sum`, `then`, `time`, `to`, `true`, `type`, `void`, `write`.
 
 Whitespace is allowed between any two tokens and consists of any
 sequence of spaces, line comments, block comments, and newline
@@ -77,20 +77,19 @@ allowed.
 ### Type Syntax
 
 The base types are Booleans, 64-bit signed integers, and 64-bit
-(double precision) floats, of which you can form arrays and tuples:
+(double precision) floats, of which you can form arrays and structs:
 
-TODO
 ```
 type : int
      | bool
      | float
-     | <variable>
      | <type> [ , ... ]
-     | { <type> , ... }
+     | <variable>
+     | void
 ```
 
 The `<variable>` branch refers to type variables introduced with
-the `type` command; see below.
+the `struct` command; see below.
 
 The array syntax allows any number of commas between the square
 brackets; for example, `int[,,,]` means a four-dimensional array of
@@ -100,39 +99,40 @@ and `int[][]` (a one-dimensional or rank-1 array of one-dimensional or
 rank-1 arrays). The difference is that the first is guaranteed to be
 rectangular, while the second is not.
 
-JPL does not have any implicit conversions between types.
+JPL does not have any implicit conversions between types, not even from
+ints to floats.
+
 
 ### Expressions
 
-The constructors for each basic type, where `true` and `false` are the
-two Boolean values:
+JPL has constructors for each basic type:
 
 ```
 expr : <integer>
      | <float>
      | true
      | false
+     | void
 ```
 
-Variables, which always have a static type from the environment.
+Variables always have a static type from the environment:
 
 ```
 expr : <variable>
 ```
 
-Tuple and array constructors:
+Struct and array constructors use curly braces and square braces, respectively:
 
-TODO
 ```
-expr : { <expr> , ... }
+expr : <variable> { <expr> , ... }
      | [ <expr> , ... ]
 ```
 
-For tuples, each expression can have its own type, but for array
-constructors, each expression must have the same type. Array
-constructors always produce rank-1 arrays; there's no way to directly
-construct a higher-rank array. However, an empty array constructor,
-`[]`, is considered type invalid.
+For structs, each expression can have a distinct type (provided those types
+match the corresponding struct definition). For arrays, each expression
+must have the same type. Array constructors always produce rank-1 arrays; there
+is no way to directly construct a higher-rank array. An empty array
+constructor, `[]`, is considered type invalid.
 
 Parentheses can be used to override precedence:
 
@@ -140,9 +140,8 @@ Parentheses can be used to override precedence:
 expr : ( <expr> )
 ```
 
-Mathematical operators, which expect both operands to have the same
-type (either integer or float) and yield a result of the same type
-as the input:
+Mathematical operators expect both operands to have the same type (either
+integer or float) and yield a result of the same type as the input:
 
 ```
 expr : <expr> + <expr>
@@ -158,27 +157,26 @@ is left to right. Integer overflows wrap around in two's complement
 fashion. There are no unsigned types or operators.
 
 Integer division is defined to wrap to zero. Integer modulus is
-defined so that `a` and `a % b` have the same sign. Division by or
-modulo zero is an error. (This matches the x86\_64 `idiv` instruction.)
-TODO integer => error
+defined so that `a` and `a % b` have the same sign. Integer division
+or modulus by zero is an error. This matches the x86\_64 `idiv` instruction.
+(Float division or modulus by zero returns `NaN`.)
 
-Don't implement your own version of the modulus operator on floats!
+Do not implement your own version of the modulus operator on floats!
 Use the C standard library's `fmod` operation, or your chosen
-language's equivalent.[1]
+language's equivalent.
 
-TODO
-[1]: Python's modulus operator is different: do not use it! Python's
-    `math.fmod` is closer, but you must check for a zero right-hand
-    side and return `NaN` instead of throwing an exception.
+(Python's default modulus operator is wrong for JPL. Python's `math.fmod`
+is closer, but you must check for a zero right-hand side and return `NaN`
+instead of throwing an exception.)
 
 Keep in mind that a number of interesting floating point values exist,
 such as -0, inf, and NaN. Operations on these values should follow
 standard IEEE 754 semantics: `inf + 1.0 = inf`, and `0.0 / 0.0 = NaN`.
 Floating point instructions should generally give you the desired
-behavior for free, it is built into the FP hardware unit.
+behavior for free, thanks to the FP hardware unit.
 
-Comparisons, which take either two integer subexpressions or two
-float subexpressions, and yield Booleans:
+Comparisons take either two integer subexpressions or two
+float subexpressions and yield Booleans:
 
 ```
 expr : <expr> < <expr>
@@ -189,7 +187,7 @@ expr : <expr> < <expr>
      | <expr> >= <expr>
 ```
 
-Boolean operators, where `&&` and `||` are short-circuiting:
+JPL has 3 Boolean operators. Both `&&` and `||` are short-circuiting:
 
 ```
 expr : <expr> && <expr>
@@ -197,24 +195,24 @@ expr : <expr> && <expr>
      | ! <expr>
 ```
 
-Array and tuple operations. Both arrays and tuples are indexed by
-integers and are zero-based. Tuple indices must be integer literals,
-to support static typing. For arrays, the number of indexing
-expressions must equal the array's rank.
+Structs can be indexed with dot notation (by a variable name that matches
+a field name from the corresponding struct definition). Array can be
+indexed by integers. Array indexing is zero-based; the number of indexing
+expressions must equal the array's rank:
 
 ```
-expr : <expr> { <integer> }
+expr : <expr>.<variable>
      | <expr> [ <expr> , ... ]
 ```
 
-A conditional operator, which only evaluates the relevant branch.
-Both branches have to yield the same type.
+The conditional operator evaluates its test expression and then
+exactly one branch. Both branches must have the same type:
 
 ```
 expr : if <expr> then <expr> else <expr>
 ```
 
-Implicit loops. `sum` operates on integers and floats.
+Looping constructs. `sum` computes integers or floats.
 
 ```
 expr : array [ <variable> : <expr> , ... ] <expr>
@@ -224,7 +222,7 @@ expr : array [ <variable> : <expr> , ... ] <expr>
 Each expression in the list of bindings (between the square brackets)
 must produce an integer, and in the body of the loop (after the square
 brackets) those variables are bound to integers. `array` expressions
-yield an array, whose rank is given by the number of bindings. `sum`
+yield an array whose rank is given by the number of bindings. `sum`
 expressions yield an integer or a float, depending on the body
 expression. If the list of bindings is empty for either `array` or
 `sum`, the program is type-invalid.
@@ -241,7 +239,7 @@ expr : <variable> ( <expr> , ... )
 
 The type of a function call expression is the return type of the
 function. Function calls can refer to either other functions defined
-in the same file, or to builtin functions.
+in the same file, or to built-in functions.
 
 Precedence is necessary to disambiguate certain constructs. The
 binding strength is:
@@ -280,17 +278,17 @@ formats, described below; the format of the lvalue must match the type
 of the expression. Note that while this code is correctly typed:
 
 ```
-let { { x, y }, { z, w } } = { { 32, 48 }, { 1, 2 } }
+let mypair{ mypair{ x, y }, mypair{ z, w } } = mypair{ mypair{ 32, 48 }, mypair{ 1, 2 } }
 ```
 
 this code is not, and must be rejected by a JPL compiler:
 
 ```
-let { { x, y }, { z, w } } = { { 32, 48, 1 }, { 2 } }
+let mypair{ mypair{ x, y }, pair{ z, w } } = mypair{ mypair{ 32, 48, 1 }, mypair{ 2 } }
 ```
 
-In other words, it is not only the contents of tuples that are
-typechecked, but also the tuple structure.
+In other words, struct typechecking must validate the number of elements and
+the type of each element.
 
 Assertions evaluate the expression and abort the program (after
 printing the user's error message) if it is false. The expression must
@@ -300,12 +298,9 @@ return a boolean:
 stmt : assert <expr> , <string>
 ```
 
-TODO
 A return statement inside a function ends execution of that function;
 the type of the returned expression must match the function's return
-type. If there is not explicit return statement in a function, that is
-the same as returning `{}` (the empty tuple). Naturally, this is only
-legal if the function return type is `{}` (the type of empty tuples).
+type.
 
 ```
 stmt : return <expr>
@@ -317,22 +312,35 @@ Commands are only available at the top level (not inside functions)
 and are the only way side effects occur. Commands deal largely with
 input and output.
 
-TODO
-PNG images are the main input/output format. PNG files read as
-`{float,float,float,float}[H,W]`, with the tuple representing RGBA
-colors. Color values should be between 0.0 and 1.0. Values below 0.0
-are clipped to 0.0 and values above 1.0 are clipped to 1.0.
-NaN and negative zero map to 0.0.
+PNG images are the main input/output format. The type for a PNG is `rgba[,]`,
+that is, a rank-2 array of `rgba` pixels. `rgba` is a built-in struct defined
+as follows:
+
+```
+struct rgba {
+  r: float
+  g: float
+  b: float
+  a: float
+}
+```
+
+Color and alpha values should be between 0.0 and 1.0, inclusive. Values below
+0.0 are clipped to 0.0 and values above 1.0 are clipped to 1.0. NaN and
+negative zero map to 0.0.
 
 ```
 cmd  : read image <string> to <argument>
      | write image <expr> to <string>
 ```
 
-The `type` command introduces a type alias:
+The `struct` command introduces a struct type
 
 ```
-cmd  : type <variable> = <type>
+cmd  : struct <variable> {
+         <variable>: <type>
+         ...
+       }
 ```
 
 The `let` command is like a `let` statement but defines a global:
@@ -358,14 +366,13 @@ cmd  : print <string>
 ```
 
 Printing outputs the string followed by a newline. Showing outputs the
-expression, a space, an equal sign, another space, and then the
-expression's value. When outputting the expression, `show` need not
-preserve parentheses or whitespace, as long as the output expression
-parses to the same parse tree as the expression in the source code.
-Times should be as precise as possible (at least millisecond
-accuracy).
+expression's value (recommendation: print the input expression as well
+in a debugging mode, such as when interpreting a program). When outputting the
+expression, `show` need not preserve parentheses or whitespace, as long as the
+output expression parses to the same parse tree as the expression in the source
+code. Times should be as precise as possible (at least millisecond accuracy).
 
-Functions are pretty standard:
+Function syntax:
 
 ```
 cmd  : fn <variable> ( <binding> , ... ) : <type> { ;
@@ -373,9 +380,10 @@ cmd  : fn <variable> ( <binding> , ... ) : <type> { ;
        }
 ```
 
-Function definitions are interpreted in file order, and may not use
-the same name as either another function or a builtin. Recursive calls
-are allowed.
+Function definitions are interpreted in order of appearance (line by line), and
+may not use the same name as either another function or a builtin. Recursive
+calls are allowed.
+
 
 ### Arguments, Lvalues, and Bindings
 
@@ -398,25 +406,25 @@ argument : <variable> [ <variable> , ... ]
 ```
 
 It is a compile-time error if the number of dimension variables does
-not equal the rank of the array. Also, only the outermost of a nested
-array can have its dimensions bound in this fashion (since nested
-arrays are not guaranteed to be rectangular).
+not equal the rank of the array. Also, only the outermost layer of a nested
+array can have its dimensions bound in this fashion (since nested arrays are
+not guaranteed to be rectangular).
 
-Lvalues can bind the parts of a tuple:
+Lvalues can bind the fields of a struct:
 
 ```
 lvalue : <argument>
-       | { <lvalue> , ... }
+       | <variable>{ <lvalue> , ... }
 ```
 
 Bindings are the same as lvalues but also include types:
 
 ```
 binding : <argument> : <type>
-        | { <binding> , ... }
+        | <variable>{ <binding> , ... }
 ```
 
-> Here are some example arguments, and then the bindings they introduce:
+> Here are some example arguments and the bindings they introduce:
 > 
 > `x : int` takes an `int` argument
 > and binds `x : int`.
@@ -433,18 +441,18 @@ binding : <argument> : <type>
 > `x[H, W] : {int, float}[][,]` takes an `{int, float}[][,]` argument
 > and binds `x : {int, float}[][,]`, `W : int`, `H : int`.
 > 
-> `{ x[H, W] : int[,], { y : int, z[T] : float[] } }`
-> takes an `{int[,], {int, float[]}}`
+> `mypair1{ x[H, W] : int[,], mypair2{ y : int, z[T] : float[] } }`
+> takes a `mypair1{int[,], mypair2{int, float[]}}`
 > and binds `x : int[,]`, `W : int`, `H : int`,
 > `y : int`, `z : float[]`, `T : int`.
+
 
 Semantics
 ---------
 
-A JPL program has a compilation phase and an execution phase. It is
-possible that a JPL implementation will want to blur the distinction
-between these phases (e.g. because it is an interpreter or a JIT
-compiler), but conceptually they must exist.
+A JPL program has a compilation phase and an execution phase.
+(It is possible that a JPL implementation will want to blur the distinction
+between these phases, e.g. because it is an interpreter or a JIT compiler.)
 
 At compile time, a JPL implementation must reject syntactically
 malformed inputs (those that are not accepted by the JPL grammar) as
@@ -461,7 +469,7 @@ Integers behave like 64-bit two's-complement signed integers.
 
 Floats behave like by 64-bit IEEE-754 floating point values.
 
-Tuples are laid out contiguously in memory, with all values 32-bit
+Structs are laid out contiguously in memory, with all values 32-bit
 aligned.
 
 Arrays are a list of 64-bit dimension sizes and a 64-bit data pointer.
@@ -536,7 +544,9 @@ that are not 64-bit signed integer values.
 >
 >     ./program 1 2 3 4
 >
-> It must print `args = [1, 2, 3, 4]`.
+> It must print at least `[1, 2, 3, 4]`
+>
+> It may print `args = [1, 2, 3, 4]`.
 
 ### Errors
 
@@ -546,16 +556,15 @@ any such condition occurs, the JPL program must be cleanly terminated
 message must be displayed that begins with the text `[abort]`.
 Run-time errors include:
 
-- an integer division or modulus operation by zero[^1]
+- an integer division or modulus operation by zero
+  * Floating-point divisions and modulus operations with zero right-hand
+    arguments are not erroneous; they return NaN.
 
 - out-of-bounds array access
 
 - `sum` or `array` with non-positive bounds
 
 - any failing assertion
-
-[^1]: Note that floating-point divisions and modulus operations with
-      zero right-hand arguments are not erroneous: they return NaN.
 
 Or they may be *external* errors:
 
@@ -572,7 +581,7 @@ Or they may be *external* errors:
 When an internal or external error occurs, the process running the
 compiled JPL program should exit with non-zero status code.
 
-JPL compilers must preserve internal errors: the compiler shouldn't
+JPL compilers must preserve internal errors: the compiler should not
 change a program with internal errors into one without, or vice versa.
 JPL compilers must therefore emit code to check integer division
 arguments, array bounds, and assertions. It is acceptable to not emit
@@ -580,7 +589,7 @@ that code when the JPL compiler can prove that the assertion cannot
 fail. JPL compilers must also preserve termination and
 non-termination.
 
-JPL compilers need not strictly preserve external errors---that's
+JPL compilers need not strictly preserve external errors---that is
 impossible without a strict contract from the operating system---but
 should preserve the order and arguments of system calls, except for
 the time information in `time` commands. In practice, this is not
@@ -591,7 +600,7 @@ error (for example, bounds checks could be implemented as assertions).
 
 There are some rarer exceptional conditions, like stack overflow,
 where JPL programs are allowed to segfault or otherwise terminate
-uncleanly, and need not be preserved. As long as the compiler doesn't
+uncleanly, and need not be preserved. As long as the compiler does not
 go out of its way to mess with this things should be fine.
 
 Elaboration
@@ -611,7 +620,7 @@ statements:
 
 ### Errors
 
-A JPL implementation could implement error checks by inserting
+A JPL implementation may implement error checks by inserting
 assertions into the program as it is being compiled. For example, a
 function like this:
 
@@ -634,7 +643,7 @@ where `JPL.divide` is provided by the JPL implementation and looks like:
 
 ### Arrays
 
-It's helpful to introduce a type, `data`, for a pointer to data.
+It is helpful to introduce a type, `data`, for a pointer to data.
 Then an array like `int[,]` can be represented in memory by the tuple
 `{int, int, data}`, where the first two integers are the dimension.
 Since arrays are immutable, it doesn't matter whether the tuple is
