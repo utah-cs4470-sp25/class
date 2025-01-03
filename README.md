@@ -8,31 +8,17 @@ CS 4470: Compilers, Spring 2025
 *Discord*: <https://discord.gg/sfQBgKBwsr> \
 *Github*: <https://github.com/utah-cs4470-sp25/class>
 
+Syllabus etc. on Canvas: 
+<https://utah.instructure.com/courses/1021427>
+
 Assignments
 ---
 
 - [HW1](./hw1)
 
 
-About the Course
+JPL Language Specification
 ----------------
 
-The goal of this class is to teach you how a compiler works, including
-all of the major components from front to back. By the end of this
-course, you will be able to:
-
-- understand concepts in lexical analysis, and implement a lexer
-- understand how a programming language is represented by a grammar
-- understand LL and LR parsing, and write an LL parser
-- understand concepts in type checking, and implement a type checker
-- understand target-independent program optimizations, and implement
-  several relatively simple optimizations
-- understand code generation, and implement generation of x86-64
-
-This is a programming-intensive course. Students will write a compiler for a
-simple language called JPL. Prepare to spend a significant amount of time
-programming.
-
-More on Canvas:
-<https://utah.instructure.com/courses/1021427>
+- [`spec.md`](./spec.md)
 
