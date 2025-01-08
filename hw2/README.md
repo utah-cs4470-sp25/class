@@ -267,7 +267,7 @@ You can run these tests on your computer by downloading the
 auto-grader and running:
 
 ```
-    make -C <auto-grader directory> DIR=<compiler directory> PART=<part>
+    make -C <auto-grader directory> DIR=<compiler directory> test-hw2
 ```
 
 Part 1 is the hardest. Do it first! Go in order, test by test.
