@@ -38,7 +38,7 @@ and should not be written in source code.
 
 The keywords are: `array`, `assert`, `bool`, `else`, `false`, `float`,
 `fn`, `if`, `image`, `int`, `let`, `print`, `read`, `return`, `show`,
-`sum`, `then`, `time`, `to`, `true`, `type`, `void`, `write`.
+`struct`, `sum`, `then`, `time`, `to`, `true`, `void`, `write`.
 
 Whitespace is allowed between any two tokens and consists of any
 sequence of spaces, line comments, block comments, and newline
@@ -284,7 +284,7 @@ let mypair{ mypair{ x, y }, mypair{ z, w } } = mypair{ mypair{ 32, 48 }, mypair{
 this code is not, and must be rejected by a JPL compiler:
 
 ```
-let mypair{ mypair{ x, y }, pair{ z, w } } = mypair{ mypair{ 32, 48, 1 }, mypair{ 2 } }
+let mypair{ mypair{ x, y }, mypair{ z, w } } = mypair{ mypair{ 32, 48, 1 }, mypair{ 2 } }
 ```
 
 In other words, struct typechecking must validate the number of elements and
