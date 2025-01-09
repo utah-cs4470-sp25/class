@@ -47,6 +47,16 @@ non-newline characters. Block comments are a `/*`, followed by
 any sequence of characters not including `*/`, followed by `*/`.
 Newline escapes are a backslash followed immediately by a newline.
 
+Example program with newline escapes
+(`let x = 4 + 4` could be on one line, without escapes):
+
+```
+let x = \
+4 \
++ 4
+show x
+```
+
 A single-line comment nevers contain a newline character, so the
 newline character at the end of a single-line comment generates a
 distinct newline token. Conversely, a multi-line comment may contain
