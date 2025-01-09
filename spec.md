@@ -31,7 +31,7 @@ escapes like `\n` aren't supported (you're not going to need them).
 Multi-line string literals are not supported.
 
 Variables are a letter (upper case A-Z or lower case a-z) followed by
-any number of letters or digits, underscores, or dots, *except* when
+any number of letters or digits, or underscores, *except* when
 the sequence of letters and digits is a keyword. By convention,
 variables that contain dots are reserved for compiler intermediates
 and should not be written in source code.
@@ -631,12 +631,12 @@ function like this:
 can be transformed into:
 
     fn example(i : int, j : int) : int {
-        return JPL.divide(i, j)
+        return __JPL__divide(i, j)
     }
 
-where `JPL.divide` is provided by the JPL implementation and looks like:
+where `__JPL__divide` is provided by the JPL implementation and looks like:
 
-    fn JPL.divide(i : int, j : int) : int {
+    fn __JPL__divide(i : int, j : int) : int {
         assert j != 0, "Error: Division by zero"
         return i / j
     }
@@ -670,11 +670,11 @@ let filename = [ 116, 101, 115, 116, 46, 112, 110, 103, 0 ]
 
 where a null terminator is inserted for compatibility with C-style
 strings. Then the `read` statement itself might be converted to a call
-to a `read.image` function (note the dot, marking it as a compiler
+to a `__read__image` function (note the underscores, marking it as a compiler
 internal):
 
 ```
-let a = read.image(filename)
+let a = __read__image(filename)
 ```
 
 Once all commands have been converted to builtin functions, the top
