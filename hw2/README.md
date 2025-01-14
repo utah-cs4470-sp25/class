@@ -259,7 +259,7 @@ The auto-grader uses these tests in three different ways.
   that you pass.
 
 - Part 3 asks your compiler to lex each file in `test-lexer3` and
-  verifies that your compiler issues a lexing error. There are 546
+  verifies that your compiler issues a lexing error. There are 268
   files, and your grade on this portion is the number of these tests
   that you pass. A lot of these tests are pretty repetitive, focusing
   mostly on invalid characters.
