@@ -26,7 +26,7 @@ cmd  : read image <string> to <argument>
 type : int
      | bool
      | float
-     | <type> [ , ... ]
+     | <type> [ , ... ]   # beware! possibly-empty sequence!
      | <variable>
      | void
 
@@ -43,7 +43,7 @@ lvalue : <argument>
 ```
 
 Recall that a JPL program is a sequence of newline-terminated
-commands (`cmd`s).
+commands (`cmd`).
 
 Our HW3 subset has almost all the commands (only function definitions
 are missing) and all of the types. It does not include statements.
@@ -75,7 +75,7 @@ will look for these messages.
 
 ## Output Format
 
-Your parser must produce output in the following "S-expression" format.
+Your parser must produce output in the following S-expression format.
 Every AST node should print as:
 
 - An open parenthesis
