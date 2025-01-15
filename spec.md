@@ -33,8 +33,8 @@ Multi-line string literals are not supported.
 Variables are a letter (upper case A-Z or lower case a-z) followed by
 any number of letters or digits, or underscores, *except* when
 the sequence of letters and digits is a keyword. By convention,
-variables that contain dots are reserved for compiler intermediates
-and should not be written in source code.
+variables that begin with double underscores are reserved for compiler
+intermediates and should not be written in source code.
 
 The keywords are: `array`, `assert`, `bool`, `else`, `false`, `float`,
 `fn`, `if`, `image`, `int`, `let`, `print`, `read`, `return`, `show`,
@@ -534,8 +534,8 @@ math functions:
   positive and negative infinity converting into the maximum and
   minimum integers, and NaN converting to 0.
 
-They can also provide builtin functions whose name contains a dot,
-which the compiler can use during compilation.
+They can also provide builtin functions whose name begins with
+`__JPL__` for the compiler to use during compilation.
 
 JPL must provide a global `args` variable of type `int[]` containing
 integers provided in the command line program's command line, and a
