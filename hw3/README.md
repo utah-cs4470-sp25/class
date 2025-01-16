@@ -16,7 +16,6 @@ You will finish the parser in HW4 and HW5.
 ```
 cmd  : read image <string> to <argument>
      | write image <expr> to <string>
-     | type <variable> = <type>
      | let <lvalue> = <expr>
      | assert <expr> , <string>
      | print <string>
