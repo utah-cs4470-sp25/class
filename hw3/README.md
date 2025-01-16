@@ -51,7 +51,7 @@ in an S-expression format like so:
 [jpl-p]: https://github.com/utah-cs4470-sp25/class/blob/main/spec.md#jpl-compiler-command-line-interface
 
 ```
-(ReadCmd "photo.png" (VarArgument photo))
+(ReadCmd "photo.png" (VarLValue photo))
 (AssertCmd (VarExpr a) "Photo must be 800 pixels wide")
 (AssertCmd (VarExpr b) "Photo must be 600 pixels tall")
 (LetCmd (VarLValue middle) (VarExpr photo))
