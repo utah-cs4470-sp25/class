@@ -14,7 +14,7 @@ You will finish the parser in HW4 and HW5.
 ## JPL subset
 
 ```
-cmd  : read image <string> to <argument>
+cmd  : read image <string> to <lvalue>
      | write image <expr> to <string>
      | let <lvalue> = <expr>
      | assert <expr> , <string>
@@ -29,9 +29,7 @@ expr : <integer>
      | <variable>
      | [ <expr> , ... ]  # beware! recursion! possibly-empty sequence!
 
-argument : <variable>
-
-lvalue : <argument>
+lvalue : <variable>
 ```
 
 Recall that a JPL program is a sequence of newline-terminated
@@ -56,7 +54,7 @@ in an S-expression format like so:
 (ReadCmd "photo.png" (VarArgument photo))
 (AssertCmd (VarExpr a) "Photo must be 800 pixels wide")
 (AssertCmd (VarExpr b) "Photo must be 600 pixels tall")
-(LetCmd (ArgLValue (VarArgument middle)) (VarExpr photo))
+(LetCmd (VarLValue middle) (VarExpr photo))
 (WriteCmd (VarExpr middle) "profile.png")
 ```
 
