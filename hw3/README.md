@@ -16,19 +16,11 @@ You will finish the parser in HW4 and HW5.
 ```
 cmd  : read image <string> to <argument>
      | write image <expr> to <string>
-     | type <variable> = <type>
      | let <lvalue> = <expr>
      | assert <expr> , <string>
      | print <string>
      | show <expr>
      | time <cmd>   # beware! recursion!
-
-type : int
-     | bool
-     | float
-     | <type> [ , ... ]   # beware! possibly-empty sequence!
-     | <variable>
-     | void
 
 expr : <integer>
      | <float>
@@ -45,8 +37,8 @@ lvalue : <argument>
 Recall that a JPL program is a sequence of newline-terminated
 commands (`cmd`).
 
-Our HW3 subset has almost all the commands (only function definitions
-are missing) and all of the types. It does not include statements.
+Our HW3 subset has almost all the commands (only function and struct definitions
+are missing). It does not include statements.
 Its expressions are simple, except for the array constructor,
 and both arguments and lvalues are as simple as possible.
 
@@ -133,7 +125,6 @@ The AST node names that you must use in your S-expression output are:
 ```
 ReadCmd
 WriteCmd
-TypeCmd
 LetCmd
 AssertCmd
 PrintCmd
@@ -151,8 +142,7 @@ TrueExpr
 FalseExpr
 VarExpr
 ArrayLiteralExpr
-VarArgument
-ArgLValue
+VarLValue
 ```
 
 Printing floats is very difficult, and differs across languages, so
@@ -217,12 +207,30 @@ JPL programs, which your parser must parse correctly.
 
 The ones named `fail-fuzzer1` (Part 3), `fail-fuzzer` (Part 4), and
 `fail-fuzzer3` (Part 5) contain invalid programs that your parser must
-raise an error on.
+print `"Compilation failed"` on.
+
+**We are changing how we call your compiler from this assignment on.**
+From now on, we will call your compiler's `Makefile` with two
+arguments: `TEST`, which points to the program you want to compile,
+and `FLAGS`, which are the JPL compiler flags. As in,
+
+```
+    make run TEST=../grader/hw3/ok/001.jpl FLAGS=-p
+```
+
+Your Makefile should have a `run` rule like this:
+
+```
+    run: compiler.class
+        java compiler $(FLAGS) $(TEST)
+```
 
 You can run these tests on your computer by downloading the
-auto-grader and running it like so:
+auto-grader and running:
 
-    make -C <auto-grader directory> DIR=<compiler directory> PART=<part>
+```
+    make -C <auto-grader directory> DIR=<compiler directory> PART=<number 1-5> test-hw3
+```
 
 Generally speaking, Part 1 is somewhat easier than the other parts.
 Start there. Parts 3, 4, and 5 are the hardest. Save them for last.
