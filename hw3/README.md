@@ -132,7 +132,6 @@ The AST node names that you must use in your S-expression output are:
 ```
 ReadCmd
 WriteCmd
-TypeCmd
 LetCmd
 AssertCmd
 PrintCmd
