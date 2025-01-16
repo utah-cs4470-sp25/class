@@ -128,12 +128,6 @@ AssertCmd
 PrintCmd
 ShowCmd
 TimeCmd
-IntType
-FloatType
-BoolType
-VarType
-ArrayType
-VoidType
 IntExpr
 FloatExpr
 TrueExpr
