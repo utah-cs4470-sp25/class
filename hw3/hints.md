@@ -76,18 +76,6 @@ a parser generator we may discover it and have to revise your grade to a 0. Do
 not do it.
 
 
-## Hint: Arguments and LValues
-
-Even though `argument` and `lvalue` have only have one production each
-in the subset of JPL that we are considering in this assignment, we
-still recommend you define all of the associated AST node classes and
-parsing functions. It'll seem annoying now, but will save you time in
-later parsing assignments, which are generally harder.
-
-Your output S-expression must contain `ArgLValue` and `VarArgument`
-nodes.
-
-
 ## Hint: Integers and floats
 
 When you parse an integer literal expression or a float literal
