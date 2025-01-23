@@ -420,18 +420,17 @@ not equal the rank of the array. Also, only the outermost layer of a nested
 array can have its dimensions bound in this fashion (since nested arrays are
 not guaranteed to be rectangular).
 
-Lvalues can bind the fields of a struct:
+Lvalues are merely arguments
+(2025-01-22: previously, lvalues could also bind struct fields):
 
 ```
 lvalue : <argument>
-       | <variable>{ <lvalue> , ... }
 ```
 
 Bindings are the same as lvalues but also include types:
 
 ```
 binding : <argument> : <type>
-        | <variable>{ <binding> , ... }
 ```
 
 > Here are some example arguments and the bindings they introduce:
@@ -450,11 +449,6 @@ binding : <argument> : <type>
 > 
 > `x[H, W] : {int, float}[][,]` takes an `{int, float}[][,]` argument
 > and binds `x : {int, float}[][,]`, `W : int`, `H : int`.
-> 
-> `mypair1{ x[H, W] : int[,], mypair2{ y : int, z[T] : float[] } }`
-> takes a `mypair1{int[,], mypair2{int, float[]}}`
-> and binds `x : int[,]`, `W : int`, `H : int`,
-> `y : int`, `z : float[]`, `T : int`.
 
 
 Semantics
