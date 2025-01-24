@@ -10,38 +10,48 @@ modifying it to parse most JPL syntax, especially the recursive parts.
 Extend your parser from [Homework 3](../hw3/README.md) with the following
 additional options:
 
+```diff
++type : int
++     | bool
++     | float
++     | <type> [ , ... ]
++     | <variable>
++     | void
 
-```
-type : int
-     | bool
-     | float
-     | <type> [ , ... ]
-     | <variable>
-     | void
+ cmd  : read image <string> to <lvalue>
+      | write image <expr> to <string>
+      | let <lvalue> = <expr>
+      | assert <expr> , <string>
+      | print <string>
+      | show <expr>
+      | time <cmd>
++     | fn <variable> ( <binding> , ... ) : <type> { ;
++           <stmt> ; ... ;
++       }
++     | struct <variable> { ;
++           <variable>: <type> ; ... ;
++       }
 
-expr : variable> { <expr> , ... }
-     | ( <expr> )
-     | <expr> . <variable>
-     | <expr> [ <expr> , ... ]
-     | <variable> ( <expr> , ... )
++stmt : let <lvalue> = <expr>
++     | assert <expr> , <string>
++     | return <expr>
 
-cmd  : fn <variable> ( <binding> , ... ) : <type> { ;
-           <stmt> ; ... ;
-       }
-     | struct <variable> { ;
-         <variable>: <type> ; ... ;
-       }
+ expr : <integer>
+      | <float>
+      | true
+      | false
+      | <variable>
+      | [ <expr> , ... ]
++     | variable> { <expr> , ... }
++     | ( <expr> )
++     | <expr> . <variable>
++     | <expr> [ <expr> , ... ]
++     | <variable> ( <expr> , ... )
 
-stmt : let <lvalue> = <expr>
-     | assert <expr> , <string>
-     | return <expr>
+ lvalue : <variable>
++       | <variable> [ <variable> , ... ]
 
-argument : <variable>
-         | <variable> [ <variable> , ... ]
-
-lvalue : <argument>
-
-binding : <argument> : <type>
++binding : <lvalue> : <type>
 ```
 
 Note that in this grammar the semicolon `;` represents a `NEWLINE`
@@ -119,4 +129,3 @@ The weight of each part is:
 | 10%    | Part 3   |
 | 10%    | Part 4   |
 | 10%    | Part 5   |
-
