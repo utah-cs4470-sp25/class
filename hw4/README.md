@@ -18,13 +18,13 @@ additional options:
 +     | <variable>
 +     | void
 
-cmd  : read image <string> to <lvalue>
-     | write image <expr> to <string>
-     | let <lvalue> = <expr>
-     | assert <expr> , <string>
-     | print <string>
-     | show <expr>
-     | time <cmd>
+ cmd  : read image <string> to <lvalue>
+      | write image <expr> to <string>
+      | let <lvalue> = <expr>
+      | assert <expr> , <string>
+      | print <string>
+      | show <expr>
+      | time <cmd>
 +     | fn <variable> ( <binding> , ... ) : <type> { ;
 +           <stmt> ; ... ;
 +       }
@@ -36,19 +36,19 @@ cmd  : read image <string> to <lvalue>
 +     | assert <expr> , <string>
 +     | return <expr>
 
-expr : <integer>
-     | <float>
-     | true
-     | false
-     | <variable>
-     | [ <expr> , ... ]
+ expr : <integer>
+      | <float>
+      | true
+      | false
+      | <variable>
+      | [ <expr> , ... ]
 +     | variable> { <expr> , ... }
 +     | ( <expr> )
 +     | <expr> . <variable>
 +     | <expr> [ <expr> , ... ]
 +     | <variable> ( <expr> , ... )
 
-lvalue : <variable>
+ lvalue : <variable>
 +       | <variable> [ <variable> , ... ]
 
 +binding : <lvalue> : <type>
