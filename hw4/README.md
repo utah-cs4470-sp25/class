@@ -49,7 +49,6 @@ token. Informally, this subset is all of JPL except for most of the
 expressions.
 
 The new AST nodes that your S-expression output must include are:
-names are:
 
 ```
 IntType
