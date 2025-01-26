@@ -102,7 +102,7 @@ succeeded`. We will expect this output format when testing your code.
 The directories `ok` (Part 1) and `ok-fuzzer` (Part 2) contain valid
 JPL programs, which your parser must parse correctly.
 
-The ones named `fail-fuzzer1` (Part 3), `fail-fuzzer` (Part 4), and
+The ones named `fail-fuzzer1` (Part 3), `fail-fuzzer2` (Part 4), and
 `fail-fuzzer3` (Part 5) contain invalid programs that your parser must
 raise an error on.
 
