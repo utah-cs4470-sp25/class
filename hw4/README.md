@@ -41,6 +41,7 @@ additional options:
       | true
       | false
       | <variable>
++     | void
       | [ <expr> , ... ]
 +     | variable> { <expr> , ... }
 +     | ( <expr> )
@@ -67,8 +68,10 @@ BoolType
 ArrayType
 VoidType
 StructType
-ArrayIndexExpr
+VoidExpr
+StructLiteralExpr
 DotExpr
+ArrayIndexExpr
 CallExpr
 FnCmd
 StructCmd
