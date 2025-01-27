@@ -43,7 +43,7 @@ additional options:
       | <variable>
 +     | void
       | [ <expr> , ... ]
-+     | variable> { <expr> , ... }
++     | <variable> { <expr> , ... }
 +     | ( <expr> )
 +     | <expr> . <variable>
 +     | <expr> [ <expr> , ... ]
