@@ -254,7 +254,7 @@ in the same file, or to built-in functions.
 Precedence is necessary to disambiguate certain constructs. The
 binding strength is:
 
-- Postfix `[]` and `{}` have the highest precedence
+- Postfix `[]` and `.` have the highest precedence
 - Unary prefix `!` and `-` have the next-highest precedence
 - Multiplicative binary operators `*`, `/`, and `%` have third highest
 - Additive binary operators `+` and `-` are next
