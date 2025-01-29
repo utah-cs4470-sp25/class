@@ -263,6 +263,9 @@ binding strength is:
 - Prefix `array`, `sum`, and `if` expressions have the lowest
   precedence
 
+Within a precedence class, associativity (and evaluation order)
+is left-to-right (left associative).
+
 > For example,
 >
 >    array[i : N] if ! y[i] then 0 else 1 + 2 * x[i]
