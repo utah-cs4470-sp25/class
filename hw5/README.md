@@ -79,7 +79,7 @@ disambiguated using JPL's [precedence rules](../spec.md#Expressions):
 
 | Operation                                            | Associativity |
 |------------------------------------------------------|---------------|
-| Indexing with `{ <integer> }` and `[ <expr> , ... ]` | Postfix       |
+| Indexing with `. <variable>` and `[ <expr> , ... ]`  | Postfix       |
 | Unary inverse `!` and negation `-`                   | Prefix        |
 | Multiplicative operations `*`, `/`, and `%`          | Left          |
 | Additive operations `+` and `-`                      | Left          |
