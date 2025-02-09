@@ -120,7 +120,7 @@ on your disambiguated grammar before you start implementing it.
 
 # Testing your code
 
-We will run your compiler the same as for HW3 and HW4:
+We will run your compiler just like we did for HW3 and HW4:
 
     make run TEST=/grader/ok/001.jpl FLAGS=-p
 
