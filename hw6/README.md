@@ -62,6 +62,16 @@ Formal type rules are in the slides on Type Rules from Feb. 3:
 
 * <https://utah.instructure.com/courses/1021427/pages/02-slash-03-slides-+-notes>
 
+Make sure to include a built-in type for `rgba` structs:
+
+```
+struct rgba {
+  r: float
+  g: float
+  b: float
+  a: float
+}
+```
 
 Your parser must implement the `-t` command-line flag and print `Compilation
 failed` or `Compilation succeeded` when type checking. The autograder will
