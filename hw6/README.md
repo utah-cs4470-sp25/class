@@ -26,9 +26,9 @@ cmd : show <expr>
 
 expr : <integer>
      | <float>
-     | <variable>
      | true
      | false
+     | void
      | <expr> + <expr>
      | <expr> - <expr>
      | <expr> * <expr>
@@ -108,7 +108,8 @@ type because it is not an expression.
 Define a top-level `typecheck` function (or method) that iterates over
 the list of `cmd`s in a program. It should maintain an environment
 with information about all struct declarations seen so far. It should
-also typecheck each expression within each `show` command.
+also typecheck each expression within each `show` command. Return
+the environment.
 
 Define a `type_of` function that takes an expression AST node and
 an environment (`ctx` below, with information about all struct declarations
