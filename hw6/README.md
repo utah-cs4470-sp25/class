@@ -58,7 +58,7 @@ The expressions in this subset include all of JPL's kinds of types, like
 integers, floats, booleans, arrays of various ranks, and structs.
 For every expression, you must compute a type
 using JPL's [type checking rules](../spec.md#Expressions).
-Formal type rules are in the slides on Type Rules from Feb. 3:
+Formal type rules are in the slides on Type Rules (`08-rules`) from Feb. 3:
 
 * <https://utah.instructure.com/courses/1021427/pages/02-slash-03-slides-+-notes>
 
