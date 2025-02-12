@@ -185,16 +185,22 @@ standard IEEE 754 semantics: `inf + 1.0 = inf`, and `0.0 / 0.0 = NaN`.
 Floating point instructions should generally give you the desired
 behavior for free, thanks to the FP hardware unit.
 
-Comparisons take either two integer subexpressions or two
+Inequality comparisons take either two integer subexpressions or two
 float subexpressions and yield Booleans:
 
 ```
 expr : <expr> < <expr>
      | <expr> > <expr>
-     | <expr> == <expr>
-     | <expr> != <expr>
      | <expr> <= <expr>
      | <expr> >= <expr>
+```
+
+Equality comparisons take two integers, two floats,
+or two Booleans and yield Booleans:
+
+```
+expr : <expr> == <expr>
+     | <expr> != <expr>
 ```
 
 JPL has 3 Boolean operators. Both `&&` and `||` are short-circuiting:
