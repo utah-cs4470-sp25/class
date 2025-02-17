@@ -53,7 +53,7 @@ typechecker must be extended to handle:
       | ( <expr> )
       | <expr> . <variable>
       | <expr> [ <expr> , ... ]
-      | <variable> ( <expr> , ... )
++     | <variable> ( <expr> , ... )
       | <expr> + <expr>
       | <expr> - <expr>
       | <expr> * <expr>
