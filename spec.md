@@ -304,13 +304,17 @@ return a boolean:
 stmt : assert <expr> , <string>
 ```
 
-A return statement inside a function ends execution of that function;
-the type of the returned expression must match the function's return
-type.
+A return statement inside a function ends execution of that function:
 
 ```
 stmt : return <expr>
 ```
+
+If a function has no return statements, it returns void by default.
+Every return statement in a function must contain an expression that
+matches the declared return type of the function. Unless the declared return
+type is `void`, there must be at least one return statement.
+
 
 ### Commands
 
