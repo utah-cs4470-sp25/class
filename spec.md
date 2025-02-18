@@ -292,22 +292,9 @@ stmt : let <lvalue> = <expr>
 ```
 
 A `let` statement's lvalue ("left value") is so called because it is
-the left-hand argument to an assignment operator. These have multiple
+the left-hand argument to an assignment operator. These have two
 formats, described below; the format of the lvalue must match the type
-of the expression. Note that while this code is correctly typed:
-
-```
-let mypair{ mypair{ x, y }, mypair{ z, w } } = mypair{ mypair{ 32, 48 }, mypair{ 1, 2 } }
-```
-
-this code is not, and must be rejected by a JPL compiler:
-
-```
-let mypair{ mypair{ x, y }, mypair{ z, w } } = mypair{ mypair{ 32, 48, 1 }, mypair{ 2 } }
-```
-
-In other words, struct typechecking must validate the number of elements and
-the type of each element.
+of the expression.
 
 Assertions evaluate the expression and abort the program (after
 printing the user's error message) if it is false. The expression must
