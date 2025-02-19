@@ -736,22 +736,28 @@ which may occur in any order:
 
 - Zero or one flags indicating actions taken by the compiler:
 
-  - `-l`: Perform lexical analysis only, printing the tokens to
+  - `-l` (lex): Perform lexical analysis only, printing the tokens to
     stdout. In this case, the compilation is considered to be
     successful if the input file contains only the lexemes described
     in this spec; otherwise, the compilation fails.
 
-  - `-p`: Perform lexical analysis and parsing only, pretty-printing
+  - `-p` (parse): Perform lexical analysis and parsing only, pretty-printing
     the parsed program back to ASCII text in a format based on
     s-expressions (to be described in homework assignments).  In this
     case, the compilation is considered to be successful if the input
     program corresponds to the grammar described in the current
     assignment; otherwise, the compilation fails.
 
-  - `-t`: Perform lexical analysis, parsing, and type checking (but not
+  - `-t` (typecheck): Perform lexical analysis, parsing, and type checking (but not
     code generation). In this case, the compilation is considered to be
     successful if the input program is fully legal JPL; otherwise
     the compilation fails.
+
+  - `-i` (IR): Perform lexical analysis, parsing, and type checking, then output
+    intermediate representation C code.
+
+  - `-s` (assembly): Perform lexical analysis, parsing, and type checking, then
+    generate assembly code.
 
 If the command line options to the JPL compiler do not meet these
 requirements, or if the specified file does not exist or cannot be
