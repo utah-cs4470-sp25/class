@@ -63,14 +63,17 @@ code. Ask for help on Discord.
 
 * Generate `typedef struct` code for every struct command and every array
   literal in the order that they appear in the JPL program.
-* Keep a counter for variable names, generate names in order: `_1`, `_2`, `_3`, ...
+* Keep a counter per generated function (including `jpl_main`) for variable names, generate names in order: `_1`, `_2`, `_3`, ...
 * Convert JPL types to C types as follows:
   - `int` -> `long long`
   - `float` -> `double`
   - `bool` -> `bool`
   - `void` -> custom struct (see header in any `.expected` file)
-  - array -> struct with one int field `di` per dimension and one pointer field `data` for the elements
-    + Example: `float[,]` -> `typedef struct { long long d1 ; long long d2 ; double *data ; } _a1_double;`
+  - array -> custom struct with ...
+    + one int field `di` per dimension
+    + one pointer field `data` for the elements
+    + a name of the form `_aRANK_TYPE` where `RANK` is an integer rank and `TYPE` is the C type of its elements (with any whitespace replaced by an underscore)
+    + Example: `int[,]` -> `typedef struct { long long d1 ; long long d2 ; long long *data ; } _a1_long_long;`
   - struct -> struct name (which will be defined by an earlier struct command)
 
 
@@ -87,7 +90,7 @@ struct taco {
   shell: int
   ingredients: int[]
 }
-show(taco{2, [4,5]})
+show taco{2, [4,5]}
 ```
 
 Output:
@@ -95,6 +98,26 @@ Output:
 ```
 ...
 show("(TupleType (IntType) (ArrayType (IntType) 1))", &_6);
+```
+
+`assert` must compile to an `if` that tests for nonzero input and either falls through to an
+assertion or jumps forward to safety.
+
+Example:
+
+```
+assert 1 == 2, "stop"
+```
+
+Output:
+
+```
+...
+bool _2 = _0 == _1;
+if (0 != _2)
+goto _jump1;
+fail_assertion("stop");
+_jump1:;
 ```
 
 For extra credit, change `runtime.c` to print `StructType`s nicely. Details below.
