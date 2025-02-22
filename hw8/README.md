@@ -132,8 +132,8 @@ function can print using a `(StructType t)` as input. It should work for any
 user-defined struct. Create a diff showing your changes to `runtime.c` and
 create a small but rigorous example program to demonstrate how your solution
 works. Email the diff, the JPL program, and the C output for that program
-to Ben and Bhargav. They will grade the attempt on a pass/fail basis; you
-have one shot at the 5% bonus. (Then undo the changes to your compiler so you
-can pass the autograder again!) 
+to Ben and Bhargav. (Then undo the changes to your compiler so you can pass the
+autograder again!) They will grade the attempt on a pass/fail basis. You have
+one shot at the 5% bonus. Everyone can earn the bonus; it is not a race.
 
 
