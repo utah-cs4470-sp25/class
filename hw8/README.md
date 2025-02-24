@@ -1,8 +1,6 @@
 Assignment 8: Generating C
 ==========================
 
-**Feb 22: this is a draft SUBJECT TO CHANGE. Will finalize by Feb 24.**
-
 For this assignment, compile the following subset of JPL to ugly straight-line
 C code:
 
@@ -76,11 +74,10 @@ code. Ask for help on Discord.
     + Example: `int[,]` -> `typedef struct { long long d1 ; long long d2 ; long long *data ; } _a1_long_long;`
   - struct -> struct name (which will be defined by an earlier struct command)
 
-
-Look at `runtime.c` for helpers, such as `jpl_alloc`.
+Use the helper functions provided by `runtime.c` in your output, such as `jpl_alloc`.
 
 `show` needs a type string as its first argument. For everything except structs, use the
-type S-expression printer you wrote for HW6/HW7. For structs, print a tuple type with
+type S-expression printer you wrote for HW6/HW7. For structs, you must **print a tuple type** with
 the element types inlined.
 
 Example:
@@ -140,7 +137,7 @@ auto-grader and running it like so:
 
 # Submission and grading
 
-This assignment is due Friday Feb 21.
+This assignment is due Friday Feb 28.
 
 We are happy to discuss problems and solutions with you online, in office
 hours, or by appointment.
@@ -150,11 +147,14 @@ hours, or by appointment.
 | 90%    | Part 1   |
 | 10%    | Part 2   |
 
+
+#### Extra Credit
+
 For a 5% extra credit, modify your compiler and `runtime.c` so that its show
 function can print using a `(StructType t)` as input. It should work for any
 user-defined struct. Create a diff showing your changes to `runtime.c` and
 create a small but rigorous example program to demonstrate how your solution
-works. Email the diff, the JPL program, and the C output for that program
+works. Email the diff, the example JPL program, and the C output for that program
 to Ben and Bhargav. (Then undo the changes to your compiler so you can pass the
 autograder again!) They will grade the attempt on a pass/fail basis. You have
 one shot at the 5% bonus. Everyone can earn the bonus; it is not a race.
