@@ -59,7 +59,11 @@ code. Ask for help on Discord.
 
 #### Hints
 
+
+**Feb 25:** `rgba[,]` has a built-in type: `_a2_rgba`. Use this built-in type instead of generating one.
+
 * Truncate floats when printing. Example: print `3.999` as `3.0`.
+  - **Contact the instructors if you have issues printing floats** we may relax the autograder.
 * Generate `typedef struct` code for every struct command and every array
   literal in the order that they appear in the JPL program.
 * Keep a counter per generated function (including `jpl_main`) for variable names, generate names in order: `_1`, `_2`, `_3`, ...
