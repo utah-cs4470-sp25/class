@@ -142,7 +142,7 @@ auto-grader and running it like so:
 
 # Submission and grading
 
-This assignment is due Friday Feb 28.
+This assignment is due Friday ~Feb 28~ March 7.
 
 We are happy to discuss problems and solutions with you online, in office
 hours, or by appointment.
