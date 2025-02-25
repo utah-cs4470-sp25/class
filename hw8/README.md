@@ -57,13 +57,14 @@ comments, etc.).
 See [running.md](./running.md) for instructions on how to actually run the C
 code. Ask for help on Discord.
 
-#### TLDR hints:
+#### Hints
 
+* Truncate floats when printing. Example: print `3.999` as `3.0`.
 * Generate `typedef struct` code for every struct command and every array
   literal in the order that they appear in the JPL program.
 * Keep a counter per generated function (including `jpl_main`) for variable names, generate names in order: `_1`, `_2`, `_3`, ...
 * Convert JPL types to C types as follows:
-  - `int` -> `long long`
+  - `int` -> `int64_t`
   - `float` -> `double`
   - `bool` -> `bool`
   - `void` -> custom struct (see header in any `.expected` file)
@@ -71,7 +72,7 @@ code. Ask for help on Discord.
     + one int field `di` per dimension
     + one pointer field `data` for the elements
     + a name of the form `_aRANK_TYPE` where `RANK` is an integer rank and `TYPE` is the C type of its elements (with any whitespace replaced by an underscore)
-    + Example: `int[,]` -> `typedef struct { long long d1 ; long long d2 ; long long *data ; } _a1_long_long;`
+    + Example: `int[,]` -> `typedef struct { int64_t d1 ; int64_t d2 ; int64_t *data ; } _a1_long_long;`
   - struct -> struct name (which will be defined by an earlier struct command)
 
 Use the helper functions provided by `runtime.c` in your output, such as `jpl_alloc`.
