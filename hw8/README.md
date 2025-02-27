@@ -4,9 +4,13 @@ Assignment 8: Generating C
 For this assignment, compile the following subset of JPL to ugly straight-line
 C code:
 
-```
+**Update Feb 27: added `print` and call expressions because autograder test `hw8/ok/084.jpl`
+uses calls to built-in functions and several `ok-fuzzer` tests use `print`.**
+
+```diff
 cmd : show <expr>
     | let <lvalue> = <expr>
+    | print <string>
     | assert <expr> , <string>
     | struct <variable> { ; <variable>: <type> ; ... ; }
 
@@ -48,6 +52,7 @@ expr : <variable> { <expr> , ... }
      | <expr> [ <expr> , ... ]
      | <expr> . <variable>
      | if <expr> then <expr> else <expr>
++    | <var> ( <expr> , ... )
 ```
 
 *Your C code does not need to run.* The autograder will only check that it
