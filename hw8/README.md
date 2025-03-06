@@ -71,7 +71,7 @@ code. Ask for help on Discord.
   - **Contact the instructors if you have issues printing floats** we may relax the autograder.
 * Generate `typedef struct` code for every struct command and every array
   literal in the order that they appear in the JPL program.
-* Keep a counter per generated function (including `jpl_main`) for variable names, generate names in order: `_1`, `_2`, `_3`, ...
+* Keep a counter per generated function (including `jpl_main`) for variable names, generate names in order: `_0`, `_1`, `_2`, ...
 * Convert JPL types to C types as follows:
   - `int` -> `int64_t`
   - `float` -> `double`
