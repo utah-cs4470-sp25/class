@@ -74,7 +74,6 @@ code. Ask for help on Discord.
 
 #### Hints
 
-* coming soon
 
 
 # Testing your code
