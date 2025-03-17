@@ -34,8 +34,9 @@ The expressions are roughly grouped from easiest to hardest.
 matches the `.expected` files character-by-character (ignoring whitespace,
 comments, etc.).
 
-See [running.md](./running.md) for instructions on how to actually run the output.
-You should run the output. Ask for help on Discord.
+Still, you should try to run the output.
+See [assembly.md](../assembly.md) for instructions on how to actually run the output.
+Ask for help on Discord.
 
 
 #### Hints
