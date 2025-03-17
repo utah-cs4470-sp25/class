@@ -1,5 +1,5 @@
-x86_64 Assembly Handbook for your JPL compiler
-----------------------------------------------
+x86_64 Assembly Handbook for JPL
+--------------------------------
 
 This document describes everything you need to know about assembly and
 low-level programming to generate code for your JPL compiler.
@@ -19,7 +19,7 @@ manual][manual].
 [manual]: https://nasm.us/doc/nasmdoc0.html
 
 
-You can assemble some assembly code like this:
+You can assemble code like this:
 
     nasm -fXXX code.s
 
@@ -33,9 +33,9 @@ You then need to link it, like this:
 The `runtime.a` in this case is the compiled JPL runtime, [provided
 separately][runtime], and you can use `clang` or `gcc` instead of `ld`
 if you don't have an `ld` command. Consult the JPL runtime
-documentation for more details.
+documentation for more details (such as a sample `clang` call).
 
-[runtime]:https://github.com/utah-cs4470-sp23/runtime 
+[runtime]:https://github.com/utah-cs4470-sp25/runtime 
 
 This command will produce a file called `a.out`, short for "assembler
 output". (Even though it is not actually output by your assembler...)
@@ -101,15 +101,14 @@ surprised to learn that they swap the arguments, with the destination
 register coming last. Both allow you to configure the assembly syntax
 if you'd like.
 
-Here is the [GDB documentation][gdb-docs] and [LLDB
-documentation][lldb-docs]. Various GUI front-ends for GDB are
-available if you prefer a non-command-line debugging environment. Here
-are some quick tutorials on using the assembly-relevant parts of GDB:
+* GDB documentation: <https://www.gnu.org/software/gdb/documentation>
+* LLDB documentation: <https://lldb.llvm.org/use/tutorial.html>
 
-[gdb-docs]: https://www.gnu.org/software/gdb/documentation
-[lldb-docs]: https://lldb.llvm.org/use/tutorial.html
+Various GUI front-ends for GDB are available if you prefer a non-command-line
+debugging environment. Here are some quick tutorials on using the
+assembly-relevant parts of GDB:
 
-- https://www.cs.umb.edu/~cheungr/cs341/Using_gdb_for_Assembly.pdf
+- https://web.archive.org/web/20211223222840/https://www.cs.umb.edu/~cheungr/cs341/Using_gdb_for_Assembly.pdf
 - https://www.cs.swarthmore.edu/~newhall/cs31/resources/ia32_gdb.php
 - https://web.cecs.pdx.edu/~apt/cs491/gdb.pdf
 
@@ -146,7 +145,7 @@ without a prefix underscore:
 
     global jpl_main
     global _jpl_main
-    
+
 This will work whether or not you're on macOS, which has a weird
 underscore convention. When you `extern` something, always use the
 prefix underscore; our JPL runtime has been set up to make this work
@@ -196,8 +195,8 @@ looks like this:
         <instructions here>
 
 Naturally, you put the function's name instead of `jpl_main`. For
-weird macOS reasons, always two labels for each function, one with and
-one without a prefix underscore.
+weird macOS reasons, always use two labels for each function, one with and one
+without a prefix underscore (e.g., `jpl_main` and `_jpl_main`).
 
 Your compiler should produce all of the defined functions in file
 order, with `jpl_main` being last.
@@ -206,7 +205,7 @@ Inside the function body are instructions. The general form of an
 assembly instruction looks like this:
 
     LABEL: INSTRUCTION WIDTH ARGUMENT, ARGUMENT ; COMMENT
-    
+
 Labels are optional and name locations in the binary code. (This is how
 "functions" work; they are nothing more than locations in the code.)
 In NASM, it's best to start labels that aren't functions with a
@@ -221,25 +220,27 @@ Besides a register name, an argument can also be an "immediate" (which
 in NASM you write as a decimal number) or an "indirect" location,
 which refers to a memory location. The indirect location like `[rsp +
 8]` refers to the memory location whose address is RSP plus 8 bytes.
-x86\_64 has some very fancy addressing modes like `[rdi + 8 * rsp +
-16]`, but we wont' use them. In x86\_64, at least one argument is
+x86_64 has some very fancy addressing modes like `[rdi + 8 * rsp +
+16]`, but we wont' use them. In x86_64, at least one argument is
 pretty much always a register.
 
-Instructions come from the x86\_64 ISA. The comprehensive source is the
+Instructions come from the x86_64 ISA. The comprehensive source is the
 [Intel Manuals, Volume 2][intel-manuals], but the most convenient way
-to look up an instruction is [Felix Cloutier's website][felix]. Here
-are some short guides to x86\_64:
+to look up an instruction is [Felix Cloutier's website][felix]:
 
-- https://khoury.neu.edu/home/ntuck/courses/2018/09/cs3650/amd64_asm.html
-- http://www.cs.cmu.edu/afs/cs/academic/class/15213-s20/www/recitations/x86-cheat-sheet.pdf
-- https://software.intel.com/content/dam/develop/external/us/en/documents/introduction-to-x64-assembly-181178.pdf
-- https://www.cs.tufts.edu/comp/40/docs/x64_cheatsheet.pdf
+* <https://www.felixcloutier.com/x86/>
 
-If you look up information about x86\_64 online, make sure it's for
-x86\_64! If it's for x86, that's probably fine too---a lot of those
-websites are actually showing x86\_64 instructions, and even if
-they're not, x86\_64 and x86 are very similar---typically the only
-difference is that x86\_64 also does the same operations in 64 bits.
+Here are some short guides to x86_64:
+
+- <http://www.cs.cmu.edu/afs/cs/academic/class/15213-s20/www/recitations/x86-cheat-sheet.pdf>
+- <https://michaelspangler.io/assets/docs/introduction-to-x64-assembly-181178.pdf>
+- <https://www.cs.tufts.edu/comp/40/docs/x64_cheatsheet.pdf>
+
+If you look up information about x86_64 online, make sure it's for
+x86_64! If it's for x86, that's probably fine too---a lot of those
+websites are actually showing x86_64 instructions, and even if
+they're not, x86_64 and x86 are very similar---typically the only
+difference is that x86_64 also does the same operations in 64 bits.
 However, there's documentation out there on ARM assembly, PPC
 assembly, and so on. Those will only confuse you.
 
@@ -301,27 +302,27 @@ to save and restore them, like so:
 
     function:
     _function:
-    	push    rbp
-    	mov     rbp, rsp
-        ...
-	    pop     rbp
-	    ret
+      push    rbp
+      mov     rbp, rsp
+      ...
+      pop     rbp
+      ret
 
 The R12 register is also callee-saved, so in the `jpl_main` function
 we'll need to save it like so:
 
     jpl_main:
     _jpl_main:
-    	push    rbp
-    	mov     rbp, rsp
-        push    r12
-        mov     r12, rbp
-        ...
-        pop     r12
-	    pop     rbp
-	    ret
+      push    rbp
+      mov     rbp, rsp
+      push    r12
+      mov     r12, rbp
+      ...
+      pop     r12
+      pop     rbp
+      ret
 
-In other functions, we just won't touch R12, so we won't need to save it.
+In other functions, we won't touch R12, so we won't need to save it.
 
 The RAX, R10, R11, and other registers we use are caller-saved,
 meaning that when you call a function, you should assume that those
@@ -331,10 +332,10 @@ registers have been wiped.
 
 ## Pushing and popping
 
-Then you can push RAX on the stack like so:
+Push RAX on the stack like so:
 
     push rax
-    
+
 You can pop an integer or boolean value from the stack into RAX like
 so:
 
@@ -368,7 +369,7 @@ That uses a plain `sub`:
 Similarly we can drop values from the stack if we no longer need them:
 
     add rsp, 8  ; Drop 8 bytes
-    
+
 When calling functions, the stack must be aligned to a multiple of 16
 bytes, which we do by reserving padding bytes and then later dropping
 them.
@@ -392,7 +393,7 @@ We will always refer to variables as offsets to RBP (or R12 for global
 variables) and intermediate values on the stack as offsets to RSP,
 though this is convention only. Note that in `jpl_main`, we refer to
 local variables (which are also global) relative to RBP.
-    
+
 To move things in memory, for example to move a local variable to the
 stack, we copy via the R10 register, ending up with a sequence like
 this:
@@ -441,7 +442,7 @@ You can add, subtract, and multiply floats with:
     addsd xmm0, xmm1
     subsd xmm0, xmm1
     mulsd xmm0, xmm1
-    
+
 Dividing and modulus is harder. You divide and modulus integers like
 so:
 
@@ -517,7 +518,7 @@ instructions looks like this:
     cmpltsd xmm0, xmm1
     movq    rax, xmm0
     and     rax, 1
-    
+
 Here, the `CMPccSD` instruction compares two floating-point values and
 replaces the destination with either all 1 bits or all 0 bits. We then
 move the destination register to `RAX` and and it with 1 to make the
@@ -533,9 +534,11 @@ now in XMM1) to XMM0:
 
 Note that the move ends up moving XMM1, not XMM0.
 
-## Constructing and indexing tuples
+## Constructing and indexing tuples (structs)
 
-Constructing tuples is easy, because if all of the tuple parts are on
+TODO
+
+Constructing tuples (structs) is easy, because if all of the tuple parts are on
 the stack in the right order, that's identical to having the tuple on
 the stack instead. So a tuple constructor doesn't require any
 instructions.
@@ -545,7 +548,7 @@ and where they are located in our input. You do this by adding up the
 sizes of each field that comes earlier in the tuple. Once you know the
 size and the offset, you can copy within the stack.
 
-For example, if you have a `{int, int[], int}` tuple, and you want the
+For example, if you have a `foo{int, int[], int}` tuple, and you want the
 second field (the one of type `int[]`), then the full tuple takes up
 32 bytes and you are looking to copy 16 bytes starting 8 bytes in. In
 other words, you want to copy 16 bytes from `[rsp + 8]` to `[rsp +
@@ -556,7 +559,7 @@ other words, you want to copy 16 bytes from `[rsp + 8]` to `[rsp +
     mov r10, [rsp + 8]
     mov [rsp + 16], r10
     add rsp, 16
-    
+
 Note that the `add` at the end adjusts the stack---conceptually, we
 popped off 32 bytes and pushed 16, leading to a change of 16.
 
@@ -709,7 +712,7 @@ looks like this:
 Note the underscore; see the [Runtime Documentation][runtime], in the
 section on platform support, for details why.
 
-[runtime]:https://github.com/utah-cs4470-sp23/runtime 
+[runtime]:https://github.com/utah-cs4470-sp25/runtime 
 
 Loading the address of the struct return value looks like this:
 
@@ -951,7 +954,7 @@ no next index to increment:
     mov rax, [rsp + 0]
     cmp rax, [rsp + 0 + 8N]
     jl .LOOP
-    
+
 Note that if the `jl` doesn't fire, meaning the outermost loop index
 has reached its maximum, we simply fall through to the loop epilogue.
 
