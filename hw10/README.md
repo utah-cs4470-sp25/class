@@ -25,12 +25,10 @@ expr : - <expr>
      | <expr> <= <expr>
      | <expr> >= <expr>
 
-expr : { <expr> , ... }
-     | [ <expr> , ... ]
-     | <expr> { <integer> }
+expr : [ <expr> , ... ]
 ```
 
-The expressions are split into 3 groups, arranged easiest to hardest.
+The expressions are roughly grouped from easiest to hardest.
 
 *Your assembly output does not need to run.* The autograder will only check that it
 matches the `.expected` files character-by-character (ignoring whitespace,
@@ -44,7 +42,9 @@ You should run the output. Ask for help on Discord.
 
 Short hints:
 
-* March 16: Coming soon.
+* The autograder tries to normalize floats. Print floats in the natural way for
+  your language and hopefully the tests will pass.
+* 
 
 More hints: [hints.md](./hints.md)
 
@@ -56,7 +56,8 @@ We will run your compiler with the `-s` flag:
     make run TEST=/grader/ok/001.jpl FLAGS=-i
 
 The grader directory `ok` (Part 1) contains valid hand-generated JPL programs.
-The directory `ok-fuzzer` contains valid fuzzer-generated programs.
+The directories `ok-fuzzer1` (Part 2) and `ok-fuzzer2` (Part 3) contain valid
+fuzzer-generated programs.
 
 You can run these tests on your computer by downloading the
 auto-grader and running it like so:
@@ -73,7 +74,8 @@ hours, or by appointment.
 
 | Weight | Function |
 |--------|----------|
-| 90%    | Part 1   |
-| 10%    | Part 2   |
+| 80%    | Part 1   |
+| 15%    | Part 2   |
+|  5%    | Part 3   |
 
 
