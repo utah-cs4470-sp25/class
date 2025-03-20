@@ -54,7 +54,7 @@ More hints: [hints.md](./hints.md)
 
 We will run your compiler with the `-s` flag:
 
-    make run TEST=/grader/ok/001.jpl FLAGS=-i
+    make run TEST=/grader/ok/001.jpl FLAGS=-s
 
 The grader directory `ok` (Part 1) contains valid hand-generated JPL programs.
 The directories `ok-fuzzer1` (Part 2) and `ok-fuzzer2` (Part 3) contain valid
