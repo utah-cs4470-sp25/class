@@ -163,5 +163,5 @@ office hours, or by appointment.
 | 35%    | Part 2       |
 | 12%    | Part 3       |
 |  8%    | Part 4       |
-|  8%    | Part 4       |
+|  8%    | Part 5       |
 
