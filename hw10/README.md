@@ -45,6 +45,11 @@ Short hints:
 
 * The autograder tries to normalize floats. Print floats in the natural way for
   your language and hopefully the tests will pass.
+* (*March 21*) By popular demand we have fixed a bug in the staff compiler output
+  for % on floats. It now aligns the stack before `call _fmod` similar to how
+  calls to `_pow` look. (If you submitted HW10 before this change you do not need
+  to resubmit, we will use your past action score. But you will need to update
+  % ouput for HW11 and beyond.)
 * 
 
 More hints: [hints.md](./hints.md)
