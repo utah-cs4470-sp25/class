@@ -137,13 +137,18 @@ The grader's `hw11/` folder has four directories:
 - `ok1/` (Part 1): basic `let`
 - `ok2/` (Part 2): function calls
 - `ok3/` (Part 3): definitions
-- `ok-fuzzer/` (Part 4): valid auto-generated JPL programs
+- `ok-fuzzer1/` (Part 4): valid auto-generated JPL programs
+- `ok-fuzzer2/` (Part 5): valid auto-generated JPL programs
 
 You can run these tests on your computer by downloading the
 auto-grader and running it like so:
 
     make -C <auto-grader directory> DIR=<compiler directory> PART=<part> test-hw11
 
+Since hw10 and hw11 are due the same day, we have a Makefile target to run both
+at once. The autograder uses this command:
+
+    make -C <auto-grader directory> DIR=<compiler directory> PART=<part> test-hw1011
 
 # Submission and grading
 
@@ -154,8 +159,9 @@ office hours, or by appointment.
 
 | Weight | Function     |
 |--------|--------------|
-| 30%    | Part 1       |
-| 30%    | Part 2       |
-| 30%    | Part 3       |
-| 10%    | Part 4       |
+| 37%    | Part 1       |
+| 35%    | Part 2       |
+| 12%    | Part 3       |
+|  8%    | Part 4       |
+|  8%    | Part 4       |
 
