@@ -23,7 +23,8 @@ cmd : show <expr>
 +     | float
 +     | <type> [ , ... ]
 
-expr : <integer>
++ expr : <variable>
+     | <integer>
      | <float>
      | true
      | false
