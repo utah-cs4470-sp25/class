@@ -1,7 +1,8 @@
 Assignment 12: ASM Control Flow
 ===============================
 
-Generate assembly for JPL functions and let bindings.
+Generate assembly for JPL ifs, loops, and array indexing. Add support for the
+built-in variables `args` and `argnum`.
 
 Except for half the fuzzer tests, nothing in this assignment
 depends on user-defined JPL functions.
