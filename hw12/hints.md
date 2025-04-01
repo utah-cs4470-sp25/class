@@ -21,7 +21,7 @@ following code:
 Here, the `cmp` instruction compares register RAX to zero and sets the
 RFLAGS accordingly. The `je` instruction, which stands for
 Jump-if-Equal, jumps to the `.else` label if the two things compared
-by `cmp` were not equal---that is, if RAX is not equal to zero. If it
+by `cmp` were equal---that is, if RAX is equal to zero. If it
 _isn't_ equal to zero, the `je` instruction does nothing and continues
 to the next instruction:
 
