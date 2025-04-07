@@ -34,7 +34,7 @@ more efficient to generate this assembly:
 Here the `qword` annotation is mandatory, because the assembler needs
 to know whether you intended to push a 64-bit, 32-bit, or 16-bit value.
 
-On x86_64, the only supported immediate values 32-bit values. So, for
+On x86_64, only 32-bit values work as immediates. So, for
 example, the following are legal in assembly:
 
     push qword 2147483647
