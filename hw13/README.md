@@ -3,15 +3,21 @@ Assignment 13: Peephole Optimization
 
 Add the following optimizations to your compiler:
 
- - Replace short constants with immediates (`ok1/`)
- - Casts from boolean to integer (`ok2`)
- - Faster index expressions (`ok3`)
- - Multiplications by powers of 2 as shifts (`ok4`)
- - Reducing array copies for indexing (`ok5`)
+ - P1. Replace short constants with immediates (`ok1/`)
+ - P2. Simplify boolean-to-integer casts (`ok2`)
+ - P3. Faster index expressions (`ok3`)
+ - P4. Multiplications by powers of 2 as shifts (`ok4`)
+ - P5. Reducing array copies for indexing (`ok5`)
 
 # Optimization list
 
-## Short constants as immediates
+> The following descriptions assume that your compiler has functions named
+> `cg_X` for every AST node `X`, where `cg` is short for `codegen`. If your
+> code is not organized that way, that's fine, but you will need to figure out
+> the right way to modify your codebase.
+
+
+## P1. Replace short constants with immediates
 
 Without optimizations, a constant expression like `17` generates the
 following assembly code:
@@ -19,17 +25,16 @@ following assembly code:
     mov rax, [rel CONST]
     push rax
 
-This is inefficient, because it involves a read from memory, and the
-memory may not even be in cache. Instead, it is much more efficient to
-generate this assembly:
+This is inefficient because it involves a read from memory.
+The memory may not even be in cache. For small constants, it is
+more efficient to generate this assembly:
 
     push qword 17
 
 Here the `qword` annotation is mandatory, because the assembler needs
-to know whether you intended to push a 64-bit, 32-bit, or 16-bit
-value.
+to know whether you intended to push a 64-bit, 32-bit, or 16-bit value.
 
-On x86\_64, the only supported immediate values 32-bit values. So, for
+On x86_64, the only supported immediate values 32-bit values. So, for
 example, the following are legal in assembly:
 
     push qword 2147483647
@@ -46,19 +51,19 @@ This is invalid because this number does not fit in 32 bits.
 Modify your `cg_int_expr` and `cg_bool_expr` functions to use
 immediates for constants that fit in 32 bits. If the constant does not
 fit in 32 bits, continue to use the slower load-from-constant code. In
-many languages, you can test if a value fits into 32 bits like this:
+many languages, you can test if a value fits into 32 bits like this
+(_make sure this computation happens with 64-bit integers):
 
     x & ((1 << 31) - 1) == x
-   
-Be very careful to make sure this computation happens with 64-bit integers.
 
 With optimizations on, the data portion of your assembly file should
 not have any integer constants that fit into 32 bits.
 
-## Shorter boolean casts
 
-In JPL, booleans and integers are separate types; if you want to
-convert a boolean into an integer, you might write the following code:
+## P2. Simplify boolean-to-integer casts
+
+In JPL, booleans and integers are separate types. To convert a boolean into an
+integer, you might write the following code:
 
     if b then 1 else 0
 
@@ -79,18 +84,19 @@ Without optimizations, this results in the following assembly code:
 None of this code is necessary, because the representation of a
 boolean is already a 64-bit integer containing either 1 (for true) or
 0 (for false). Add code to `cg_if_expr` to recognize the specific
-pattern above and replace it with just the computation of `b`. Not
-only is this way less code, but we also don't need to read from the
-data section or handle jumps, which avoids polluting the CPU's branch
-prediction register.
+pattern above and replace it with just the computation of `b`.
 
-## Faster index expressions
+The result is much less code, fewer reads from the data section, and fewer
+jumps (which avoids polluting the CPU's branch prediction register).
+
+
+## P3. Faster index expressions
 
 In array index and array loop expressions, we need to compute a
 pointer to the array entry. For example, in this `array` loop:
 
     array[i : 1024, j : 512, k : 256] body
-    
+
 We need to compute a pointer into the array being constructed to store
 the body into it. That assembly code looks like this:
 
@@ -116,11 +122,13 @@ Instead, we can simply load that value directly:
     add rax, [rsp + OFFSET_k]
     imul rax, SIZE
     add rax, [rsp + OFFSET_ptr]
-    
+
 The value here is avoiding an `imul`, which can contend on the
-multiplication port. Make this change to in both `cg_array_index_expr`
-and `cg_array_loop_expr`. If you factored the array indexing logic
-into a helper method, you may only need to change that one method.
+multiplication port.
+
+Make this change to in both `cg_array_index_expr` and `cg_array_loop_expr`. If
+you factored the array indexing logic into a helper method, you may only need
+to change that one method.
 
 Moreover, in `array` loop examples like above, the memory argument to
 the `imul` expression is fixed---it's 1024, 512, and 256. We can use
@@ -141,7 +149,8 @@ apply this optimization when the bound fits in 32 bits.
 Implement this optimization in `cg_array_loop_expr`. Only apply this
 optimization if the loop bounds are integer constants.
 
-## Multiplications by power of two
+
+## P4. Multiplications by powers of 2
 
 When you execute the JPL expression `x * 256`, this generates the
 following assembly code:
@@ -153,54 +162,57 @@ following assembly code:
     pop rax
     imul rax, r10
     push rax
-    
+
 But multiplications by powers of two can be represented with a shift:
 
     ; compute x
     pop rax
     shl rax, 8
     push rax
-    
+
 Note that `8` is the log-base-2 of 256. Make this optimization in
 `cg_binop_expr` when the right-hand operand is an integer constant
 that is also a power of two. In most languages you can test that an
-integer `x` is a power of two with this code:
+integer `x` is a power of two with this code (using both logical
+AND `&&` and bitwise AND `&`):
 
     x >= 0 && x & (x - 1) == 0
-    
-Note that this uses the bitwise AND operator, `&`. You'll need to
-compute the log-base-2 of a power of two; the easiest way to do that
-is probably this loop:
+
+The following loop computes the log-base-2 of a number that is a power of two:
 
     int n;
     for (n = 0; (1 << n) < x; n++);
 
-It's a good idea to put both the is-power-of-two and the log-base-2
-code into helper methods.
+It's a good idea to put your is-power-of-two and log-base-2 codes into helper
+functions.
 
-Make sure you handle all multiplications; you can probably search your
-`Function` class for `imul` instructions to find them all:
+Make sure to handle **all** multiplications that appear in generated assembly.
+You can probably search your compiler for `imul` instructions to find
+them all.
+
+More notes:
 
  - Handle multiplying ith a power of two on the left or right. That
    is, both `x * 256` and `256 * x` should be optimized.
-   
- - If you see something like `256 * 256`, handle it like `256 * x`.
-   (Of course, a real compiler would constant-fold this.)
 
- - Also optimize multiplications in the array indexing portion of an
-   `array` loop, if the bounds of the array are integer constants that
+ - If you see something like `256 * 256`, handle it like `256 * x`.
+   (A real compiler would constant-fold this.)
+
+ - Optimize multiplications in the array indexing portion of an
+   `array` loop if the bounds of the array are integer constants that
    are powers of two. For example, if `array[i : 256, j : 256] body`,
    make sure the array indexing logic shifts by 8 instead of
    multiplying by 256.
 
- - However, **do not** optimize the multiplications when allocating
+ - **Do not** optimize the multiplications when allocating
    the array in an `array` loop, because `shl` doesn't set the
    overflow flag in the expected way.
 
 Probably the most important one of these is optimizing multiplications
-in array indexing, because those happens inside loops.
+in array indexing, because indexes appear in `array` loops.
 
-## Reducing array copies
+
+## P5. Reducing array copies for indexing
 
 When you write an expression like `a[10, 12]`, which is an array index
 into a variable, the generated assembly goes through these steps.
@@ -229,8 +241,8 @@ looks like this:
     imul rax, SIZE
     add rax, [rsp + 24 + 24]
 
-Here, there are two kinds of address: `[rsp + 8I]` indexes into
-the indices, which are on top of the stack, while `[rsp + 8I + 24]`
+Here, there are two kinds of address: `[rsp + (8 * K)]` indexes into
+the indices, which are on top of the stack, while `[rsp + (8 * K) + 24]`
 indexes into the array, which is just below the indices.
 
 Modify your array indexing code to allow the array to be elsewhere on
@@ -251,7 +263,7 @@ assembly code:
 When optimizations are enabled, *if the array is a local variable*, do
 not copy it to the top of the stack. Instead, set `GAP` to be the 8
 times the rank of the array *plus* the difference between the array's
-offset from RBP and the stack size at the beginning of
+offset from `RBP` and the stack size at the beginning of
 `cg_array_index_expr`. For example, if the current stack size is 48
 bytes, and the array is at `RBP + 16`, meaning an offset of -16, and
 the array has size 24 bytes, then the `GAP` should be the array offset
@@ -267,25 +279,22 @@ The upshot of this optimization is that we read the array bounds and
 pointer out of whereever the array is located on the stack, even if
 it's not at the top of the stack.
 
-Let me give a bit more detail on where this `GAP` computation comes
-from. Imagine an array of rank `R`. Without optimization, the array is
-copied to the top of the stack, and then `R` indices are pushed on top
-of it, meaning that the array is `[rsp + 8R]`. That's why the `GAP` is
-`8*R` without optimizations.
+> More detail on the `GAP` computation: Imagine an array of rank `R`. Without
+> optimization, the array is copied to the top of the stack, and then `R`
+> indices are pushed on top of it, meaning that the array is `[rsp + 8R]`.
+> That's why the `GAP` is `8*R` without optimizations.
+>
+> However, suppose the array is at `[rbp - OFFSET]` instead. Well,
+> `RBP = RSP + stack_size`, so the the array is at:
+>
+>     [rsp + (stack_size - OFFSET)]
+>
+> Then `R` indices are still pushed on top, so ultimately you get `GAP =
+> stack_size - OFFSET + 8*R`.
 
-However, suppose the array is at `[rbp - OFFSET]` instead. Well,
-`RBP = RSP + stack_size`, so the the array is at:
-
-    [rsp + (stack_size - OFFSET)]
-
-Then `R` indices are still pushed on top, so ultimately you get `GAP =
-stack_size - OFFSET + 8*R`.
-
-The reason this optimization is important is that we expect a lot of
-important code, like a matrix multiply, a neural network convolution,
-or a graphics kernel, to index into arrays inside a tight loop.
-Moreover, arrays are pretty big, so copying them needlessly is a
-waste.
+The reason this optimization is important is that we expect a lot of important
+code, like a matrix multiply, to index into arrays inside a tight loop.
+Moreover, arrays can be big. Copying arrays is a waste.
 
 
 # Testing your code
