@@ -3,11 +3,15 @@ Assignment 13: Peephole Optimization
 
 Add the following optimizations to your compiler:
 
- - P1. Replace short constants with immediates (`ok1/`)
+ - P1. Replace short constants with immediates (`ok1`)
  - P2. Simplify boolean-to-integer casts (`ok2`)
  - P3. Faster index expressions (`ok3`)
  - P4. Multiplications by powers of 2 as shifts (`ok4`)
  - P5. Reducing array copies for indexing (`ok5`)
+
+**April 8**: the 5 parts of this assignment are NOT independent. Parts 3 and 4
+depend on one another. There may be other dependencies.
+
 
 # Optimization list
 
