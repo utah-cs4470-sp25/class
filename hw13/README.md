@@ -7,7 +7,9 @@ Add the following optimizations to your compiler:
  - P2. Simplify boolean-to-integer casts (`ok2`)
  - P3. Faster index expressions (`ok3`)
  - P4. Multiplications by powers of 2 as shifts (`ok4`)
+   + **April 8**: multiplication by 1 (`2^0`) must produce no output
  - P5. Reducing array copies for indexing (`ok5`)
+   + **April 8**: instead of popping indices one-by-one HW12 style, you must pop all with one `sub rsp _` instruction
 
 **April 8**: the 5 parts of this assignment are NOT independent. Parts 3 and 4
 depend on one another. There may be other dependencies.
@@ -196,6 +198,8 @@ them all.
 
 More notes:
 
+ - (Added **April 8**) Multiplication by one must produce no output. No `imul`, no `shl`.
+
  - Handle multiplying ith a power of two on the left or right. That
    is, both `x * 256` and `256 * x` should be optimized.
 
@@ -282,6 +286,10 @@ optimization.
 The upshot of this optimization is that we read the array bounds and
 pointer out of whereever the array is located on the stack, even if
 it's not at the top of the stack.
+
+(Added **April 8**) In addition, when you pop indices after the array access,
+you must pop all at once instead of outputting several `sub rsp _` instructions.
+Calculate the total SPACE to free and output one instruction: `sub rsp SPACE`.
 
 > More detail on the `GAP` computation: Imagine an array of rank `R`. Without
 > optimization, the array is copied to the top of the stack, and then `R`
