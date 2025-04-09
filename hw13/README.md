@@ -7,7 +7,8 @@ Add the following optimizations to your compiler:
  - P2. Simplify boolean-to-integer casts (`ok2`)
  - P3. Faster index expressions (`ok3`)
  - P4. Multiplications by powers of 2 as shifts (`ok4`)
-   + **April 8**: multiplication by 1 (`2^0`) must produce no output
+   + **April 8**: multiplication (`*`) by 1 (`2^0`) must produce no output
+   + **April 9**: but, when generating array indices, always output a `shl` even if shifting by `0`
  - P5. Reducing array copies for indexing (`ok5`)
    + **April 8**: instead of popping indices one-by-one HW12 style, you must pop all with one `sub rsp _` instruction
 
@@ -198,7 +199,21 @@ them all.
 
 More notes:
 
- - (Added **April 8**) Multiplication by one must produce no output. No `imul`, no `shl`.
+ - (Added **April 8**, revised **April 9**)
+   Binary multiplication (`*`) by one sometimes produces no output.
+   Here is the exact algorithm the staff compiler uses:
+   * When multiplying for an array index expression, if the bound
+     or the type size (at the end) is a known power of two, output a `shl`
+     unconditionally, even if it ends up shifting by `0`.
+   * For binary multiplication `a * b`:
+     + If the left expression is a known power of two:
+       - generate code for the right expression,
+       - if left is `2^0`, output nothing
+       - otherwise pop the right result (to `rax`) and do an `shl`
+     + If the right expression is a known power of two:
+       - generate code if the left expression,
+       - if right is `2^0`, output nothing
+       - otherwise `shl`
 
  - Handle multiplying ith a power of two on the left or right. That
    is, both `x * 256` and `256 * x` should be optimized.
