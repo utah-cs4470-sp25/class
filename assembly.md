@@ -534,14 +534,12 @@ now in XMM1) to XMM0:
 
 Note that the move ends up moving XMM1, not XMM0.
 
+
 ## Constructing and indexing tuples (structs)
 
-TODO
-
 Constructing tuples (structs) is easy, because if all of the tuple parts are on
-the stack in the right order, that's identical to having the tuple on
-the stack instead. So a tuple constructor doesn't require any
-instructions.
+the stack in the right order, that's identical to having the tuple on the stack
+instead. So a tuple (struct) constructor doesn't require any instructions.
 
 Indexing tuples requires determining how many bytes we want to get out
 and where they are located in our input. You do this by adding up the
@@ -562,6 +560,7 @@ other words, you want to copy 16 bytes from `[rsp + 8]` to `[rsp +
 
 Note that the `add` at the end adjusts the stack---conceptually, we
 popped off 32 bytes and pushed 16, leading to a change of 16.
+
 
 ## Constructing and indexing arrays
 
@@ -595,7 +594,7 @@ size, because that is how a JPL array is laid out.
 To index into an array, you must put the array on the stack first,
 followed by the indices in reverse order, like so:
 
-![Stack organization for indexing into an array](hw11/index-stack.png)
+![Stack organization for indexing into an array](hw12/index-stack.png)
 
 Note that in this arrangement, the indices (like `j`) are in the same
 order as the array lengths (like `Y`) and are therefore fixed number
@@ -646,7 +645,7 @@ to that index by copying from `[rsp]` to `[rax]`. In this case,
 there's typically something on the stack before the indices and the
 array:
 
-![Stack organization for an array loop](hw11/array-stack.png)
+![Stack organization for an array loop](hw12/array-stack.png)
 
 In that case, the computation of the pointer into the array involves
 an additional offset:
@@ -665,6 +664,7 @@ an additional offset:
 Here the offset `T` is the offset to the first index; in an `array`
 loop, this will be equal to size of the loop body.
 
+
 # Calling functions
 
 A function call has some number of arguments and one output. But how
@@ -680,10 +680,11 @@ Float arguments are passed in `xmm0`, `xmm1`, `xmm2`, `xmm3`, `xmm4`,
 
 In either case, extra arguments go on the stack, in reverse order.
 
-Struct arguments are passed on the stack, so they do not require any
-registers at all. Struct return values, however, mean an extra integer
-passed as the first argument, in `rdi` (which contains a pointer to
-where that struct must be written).
+Struct and array arguments are passed on the stack, not in registers.
+
+Struct and array return values require an extra integer passed as the first
+argument, in `rdi` (which contains a pointer to where that struct must be
+written).
 
 To call a function, perform the following sequence of steps:
 
@@ -700,9 +701,9 @@ To call a function, perform the following sequence of steps:
 - Drop the padding, if any
 - If the return value is in a register, push it onto the stack
 
-Note that functions that return `{}` in JPL are thought of as not
-returning a value at all, so for them ou neither need to allocate
-stack space nor push a value onto the stack.
+> TODO after 2025: functions that return `{}` in JPL should not return any
+> value at all. Do not allocate stack space. Do not push a value onto the
+> stack.
 
 Most of this uses straightforward instructions. Calling the function
 looks like this:
@@ -720,6 +721,7 @@ Loading the address of the struct return value looks like this:
 
 Here the offset should be equal to the total size of all of the stack
 arguments plus the size of the padding.
+
 
 # Control flow
 
@@ -766,6 +768,7 @@ And for `||`:
 
 Note that the only difference is using `je` or `jne` in the test.
 
+
 ## Loops
 
 Loops involve a sequence of steps that need to be followed carefully
@@ -779,6 +782,7 @@ Throughout this section, when discussing a loop like:
 
 we refer to `i`, `j`, and `k` as *loop indices*, `X`, `Y` and `Z` as
 *loop bounds*, and `body` as the *loop body*.
+
 
 ### Loop prologue
 
@@ -871,11 +875,11 @@ your stack description so that later code can refer to the loop indices.
 
 The result will be a stack that looks like this:
 
-![Stack organization for a sum loop](hw11/sum-stack.png)
+![Stack organization for a sum loop](hw12/sum-stack.png)
 
 or this:
 
-![Stack organization for a array loop](hw11/array-stack.png)
+![Stack organization for a array loop](hw12/array-stack.png)
 
 but without the body. We can now enter the loop body.
 
@@ -886,20 +890,12 @@ code at the end of the loop:
 
     .LOOP:
 
-We start by computing the loop body, so that the stack looks like so:
-
-![Stack organization for a sum loop](hw11/sum-stack.png)
-
-or this:
-
-![Stack organization for a array loop](hw11/array-stack.png)
-
-including the loop body on top of the loop.
-
-Now we need to do something with the loop body---store it in the array
+We start by computing the loop body.
+Afterward, 
+we need to do something with the loop body result---store it in the array
 for an `array` loop, or add it to the running sum in a `sum` loop.
 
-For `array` loops, we need to store it into the array. To do so,
+For `array` loops, we need to store the result into the array. To do so,
 compute the pointer to the correct array index as described in the
 array indexing section, and then move `S` bytes from `[rsp]` to
 `[rax]`, where `S` is the size of the loop body. Make sure to free
@@ -914,8 +910,8 @@ For `sum` loops that are summing integers, we simply pop the body into
 Note that `[rsp + 8N + 8N]` steps over the indices and the bounds and
 therefore points to the running sum.
 
-For `sum` loops that are summing floats, there's a little more moving
-data back and forth:
+For `sum` loops that are summing floats, there's a little work to
+move data back and forth:
 
     movsd xmm0, [rsp]
     add rsp, 8
@@ -958,6 +954,7 @@ no next index to increment:
 Note that if the `jl` doesn't fire, meaning the outermost loop index
 has reached its maximum, we simply fall through to the loop epilogue.
 
+
 ### Loop Epilogue
 
 Now that the loop is over, we free all of the loop indices:
@@ -976,11 +973,10 @@ so we free the loop bounds:
 
     add rsp, 8N
 
-That's it!
+The end.
+
 
 # Commands and Statements
-
-You don't generate any code for type definitions.
 
 For `print` commands, load the address of the string like this:
 
@@ -1005,25 +1001,25 @@ For the `write` command, align the stack, compute the argument, and
 load the address of the filename into RDI. Then call `write_image`,
 drop the argument, and unalign the stack.
 
-For a `let` command, just compute the argument and reclassify it as
+For a `let` command, compute the argument and reclassify it as
 local variable by storing its (negative) offset to RBP.
 
 For the `assert` command, generate exactly the same code as you did to
 test whether the denominator of a division or modulus operation is
 zero.
 
-`time` commands are tricky. First, you will want to call the
-`get_time` function (pushing its return value on the stack). Then you
-want to run the command being timed. Then, call `get_time` again,
+`time` commands are tricky. First, call the
+`get_time` function (pushing its return value on the stack). Then
+run the command being timed. Then, call `get_time` again,
 again pushing its return value on the stack. Now:
 
-- Pop the result of the second call into XMM0
-- Copy the result of the first call ingo xmm1
+- Pop the result of the second call into xmm0
+- Copy the result of the first call into xmm1
 - Subtract
 - Align the stacks
 - Call `print_time`
 
-In the case that there's no alignment, it'll look something like this:
+If there is no alignment, the output looks something like this:
 
     call  _get_time
     sub   rsp, 8
@@ -1044,6 +1040,7 @@ In the case that there's no alignment, it'll look something like this:
 Note that pushing the result of the second call, and then immediately
 popping it, is pretty wasteful, but our compiler will do it in order
 to save code.
+
 
 # Function definitions
 
@@ -1088,5 +1085,9 @@ Note that you should do this for every `return` statement. If there's
 more than one, then you'll end up with multiple postambles and `ret`
 instructions, but that's OK. (Later ones won't be executed).
 
-If there's no `return` instruction at all, you'll need to add assembly
-corresponding to `return {}` at the end of the function.
+> TODO after 2025: generating multiple postambles should not misalign the stack.
+> TODO after 2025: If there's no `return` instruction at all, you'll need to
+> add assembly TODO after 2025: corresponding to `return {}` at the end of the
+> function.
+
+
