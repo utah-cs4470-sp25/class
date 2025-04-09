@@ -1,5 +1,21 @@
+Extra Credit: JPL++
+===================
 
-# Peephole Optimization: Extra Challenges
+Choose a topic
+
+
+
+Sample Ideas. Details below.
+
+- Parser library
+- Generic types
+- Struct inheritance
+- JPL to Wasm
+- More Peephole Optimization
+- More Loop Permutation
+
+
+# More Peephole Optimization
 
 #### 1
 
@@ -70,7 +86,7 @@ does something like this.
 - <https://llvm.org/docs/Passes.html#sroa-scalar-replacement-of-aggregates>
 
 
-# Loop Permutation: Extra challenges
+# More Loop Permutation
 
 It is not too hard to make our notion of tensor contraction less
 restrictive.
