@@ -1,9 +1,9 @@
 Assignment 14: Loop Permutation
 ===============================
 
-Add constant propagation and a loop permutation pass to your compiler.
+Add a loop permutation pass to your compiler.
 
-There are only 5 test programs:
+There are 5 test programs:
 
 - `col`: columnar sum routine
 - `crs`: cross product computed via Levi-Civita symbols
@@ -11,16 +11,17 @@ There are only 5 test programs:
 - `sft`: softmax neural network layer inference
 - `dns`: dense feed-forward neural network layer inference
 
-Each program loads data (using array loops to avoid `read image` for now),
+Each program loads data (2025: using array loops to avoid `read image` for now),
 converts the data into integer or float arrays, and then runs a
 tensor contraction on the arrays of numbers.
 
-In order to get ANY test to pass, you must complete the following subtasks:
+In order to get ANY test to pass, you must complete several subtasks:
 
  1. Implement constant propagation from `let`-bound variables to their uses in
     array bounds.
  2. Identify loops that match a grammar of _tensor contractions_ (details below).
  3. Build a traversal graph and compute the topological order of loop variables.
+ 4. Generate assembly that matches the staff compiler exactly.
 
 
 # Overview
@@ -246,8 +247,6 @@ This assignment is due Friday April 18.
 | 20%    | mat       |
 | 25%    | sft       |
 | 25%    | dns       |
-
-That's all. Only five test programs.
 
 None of the test cases require support for function definitions.
 
