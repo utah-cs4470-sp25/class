@@ -11,14 +11,15 @@ CS 4470: Compilers, Spring 2025
 Syllabus etc. on Canvas: 
 <https://utah.instructure.com/courses/1021427>
 
-Assignments
----
-
-- [HW1](./hw1)
-
 
 JPL Language Specification
 ----------------
 
 - [`spec.md`](./spec.md)
+
+
+Assembly Handbook
+----------------
+
+- [`assembly.md`](./assembly.md)
 
