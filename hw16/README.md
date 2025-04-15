@@ -21,7 +21,9 @@ Feature ideas:
 
 # More Peephole Optimization
 
-#### 1
+> For full credit, implement all of the following tasks.
+
+#### Task 1
 
 Replace a sequence of RSP changes with a single one. For example, you might
 fold this:
@@ -39,7 +41,7 @@ We expect speedups on the order of 5% on code that does a lot of array
 indexing or function calls. Other code should see roughly 1% speedups.
 
 
-#### 2
+#### Task 2
 
 Detect the pattern `x % 2 == 0` and optimize that specifically into something
 like `! (x & 1)`.
@@ -48,7 +50,7 @@ Real compilers have hundreds of patterns like this that address common
 code patterns.
 
 
-#### 3
+#### Task 3
 
 Replace integer division and modulus by powers of two with shifts right and
 bitwise ands.
@@ -62,9 +64,9 @@ If you try this, be very careful to test negative numbers, powers of two,
 `INT_MIN` and `0`.
 
 
-#### 4
+#### Task 4
 
-Extend the array indexing optimization from HW13:
+Extend the indexing optimization from HW13:
 
 - Opimize dot access like `i.x`,
 - nested dots like `i.x.z`, and
@@ -92,11 +94,12 @@ does something like this.
 
 # More Loop Permutation
 
-It is not too hard to make our notion of tensor contraction less
-restrictive.
+> These tasks are open ended. For full credit, implement one task thoroughly
+> and describe what you learned --- what worked, what didn't, and what
+> optimizations are supported in the end.
 
 
-#### 1
+#### Task 1
 
 First of all, you can allow more complicated mathematical expressions
 inside array indices. If you see an index like `A[i + j, k]`, that
@@ -106,7 +109,7 @@ from all variables used by one index to all variables used by all
 later indices.
 
 
-#### 2
+#### Task 2
 
 You can also allow more JPL expressions inside the tensor contraction
 body. Unary operators, tuple indices, and so on are easy to add
@@ -117,7 +120,7 @@ general rule is to add edges from any variables used to compute the
 array to all of the indices into that array.
 
 
-#### 3
+#### Task 3
 
 You can also support the case where the `sum` loop bounds depend on
 the `array` loop indices. The trick is that, for any `sum` loop bound,
@@ -128,7 +131,7 @@ variables changes. This is a lot of work, but conceptually not too
 complex.
 
 
-#### 4
+#### Task 4
 
 You can support some cases where the `sum` loop isn't directly below
 the `array` loop. For example, consider this snippet of a neural
