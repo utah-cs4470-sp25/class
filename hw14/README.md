@@ -3,6 +3,8 @@ Assignment 14: Loop Permutation
 
 Add a loop permutation pass to your compiler.
 
+**April 14:** implement the `-O3` flag, not `-O2`. It's for historic reasons.
+
 There are 5 test programs:
 
 - `col`: columnar sum routine
@@ -216,7 +218,7 @@ Picture in: [hints.md](./hints.md).
 
 # Testing your code
 
-Your compiler must support the `-s` flag and the `-O2` flag.
+Your compiler must support the `-s` flag and the `-O3` flag.
 
 Just like HW13, we will run your compiler two ways:
 
@@ -225,9 +227,9 @@ Just like HW13, we will run your compiler two ways:
    make run TEST=/grader/ok/001.jpl FLAGS=-s
    ```
 
-2. With `-s` and `-O2`, generate loop-permuted assembly:
+2. With `-s` and `-O3`, generate loop-permuted assembly:
    ```
-    make run TEST=/grader/ok/001.jpl FLAGS="-s -O2"
+    make run TEST=/grader/ok/001.jpl FLAGS="-s -O3"
    ```
 
 You can test on your computer by downloading the auto-grader and running it
