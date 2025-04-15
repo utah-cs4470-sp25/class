@@ -1,18 +1,22 @@
 Extra Credit: JPL++
 ===================
 
-Choose a topic
+Feature ideas:
 
-
-
-Sample Ideas. Details below.
-
-- Parser library
-- Generic types
-- Struct inheritance
-- JPL to Wasm
-- More Peephole Optimization
-- More Loop Permutation
+- Rewrite your parser to use a parser library, such as
+  [Antlr](https://www.antlr.org/). Compare the quality of error messages
+  between the old and new parsers.
+- Let structs inherit from one another. Add subtyping so that a function
+  expecting a parent struct can receive a child struct.
+- Add generic types and implement a generic library of 1D array helpers such as
+  `sort` or `filter`.
+- Add rank-polymorphic types and implement a polymorphic `map` function.
+  * Inspiration: <https://www.khoury.northeastern.edu/~jrslepak/esop14-full.pdf>
+- Add objects and virtual method tables.
+- Compile JPL to [WebAssembly text format](https://www.webassemblyman.com/wat_webassembly_text_format.html)
+- Implement more peephole optimizations (see below)
+- Implement more loop permutation (see below)
+- Add a garbage collector to the JPL runtime.
 
 
 # More Peephole Optimization
