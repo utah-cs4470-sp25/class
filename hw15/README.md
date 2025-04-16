@@ -70,15 +70,15 @@ There are 6 test folders:
 
 - `ok1/` many small programs
 - `ok2/` a few interesting programs
-- `ok3/` programs to optimize (`-O2`)
+- `ok3/` programs to optimize (`-O3`)
 - `fail-fuzzer1/` programs that should not typecheck
 - `ok-fuzzer1/` valid auto-generated programs
 - `ok-fuzzer2/` more auto-generated programs
 
-For Part 3, we will run your code once with `-s` and once with `-s -O2`:
+For Part 3, we will run your code once with `-s` and once with `-s -O3`:
 
    make run TEST=/grader/ok/001.jpl FLAGS=-s
-   make run TEST=/grader/ok/001.jpl FLAGS="-s -O2"
+   make run TEST=/grader/ok/001.jpl FLAGS="-s -O3"
 
 For Part 4 (`fail-fuzzer1`), we will only typecheck. The programs should all fail:
 
