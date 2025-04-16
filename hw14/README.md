@@ -22,9 +22,9 @@ tensor contraction on the arrays of numbers.
 In order to get ANY test to pass, you must complete several subtasks:
 
 - NEVERMIND SORRY: ~~0. Implement constant propagation from `let`-bound variables to their uses in array bounds.~~
-- 1. Identify loops that match a grammar of _tensor contractions_ (details below).
-- 2. Build a traversal graph and compute the topological order of loop variables.
-- 3. Generate assembly that matches the staff compiler exactly.
+- `1.` Identify loops that match a grammar of _tensor contractions_ (details below).
+- `2.` Build a traversal graph and compute the topological order of loop variables.
+- `3.` Generate assembly that matches the staff compiler exactly.
 
 
 # Overview
