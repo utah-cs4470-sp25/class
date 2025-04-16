@@ -5,6 +5,8 @@ Add a loop permutation pass to your compiler.
 
 **April 14:** implement the `-O3` flag, not `-O2`. It's for historic reasons.
 
+**April 16:** do not implement constant propagation. Pavel says it wasn't needed in the first place. Sorry!
+
 There are 5 test programs:
 
 - `col`: columnar sum routine
@@ -19,22 +21,24 @@ tensor contraction on the arrays of numbers.
 
 In order to get ANY test to pass, you must complete several subtasks:
 
- 1. Implement constant propagation from `let`-bound variables to their uses in
-    array bounds.
- 2. Identify loops that match a grammar of _tensor contractions_ (details below).
- 3. Build a traversal graph and compute the topological order of loop variables.
- 4. Generate assembly that matches the staff compiler exactly.
+- NEVERMIND SORRY: ~~0. Implement constant propagation from `let`-bound variables to their uses in array bounds.~~
+- 1. Identify loops that match a grammar of _tensor contractions_ (details below).
+- 2. Build a traversal graph and compute the topological order of loop variables.
+- 3. Generate assembly that matches the staff compiler exactly.
 
 
 # Overview
 
-In this assignment, we focus on `array` loops whose body is a `sum` loop, and
-where all loop bounds are statically known:
+In this assignment, we focus on `array` loops whose body is a `sum` loop:
+~~, and
+where all loop bounds are statically known:~~
 
     array[i : L, j : N] sum[k : M] A[i, k] * B[k, j]
 
-Bounds `L`, `N`, and `M` must be either integers, or variables that
-resolve to integers after constant propagation.
+> Loop permutation is much harder to do if the inner-loop bounds depend
+> on variables from the outer loop, e.g. if `M` was instead `i + 1`.
+> Ignore this issue for HW14. We will not ask you to optimize or
+> detect inner-loop bounds that depend on outer-loop variables.
 
 Moreover, the body of the inner `sum` loop can only contain binary
 operations, constants, variables, and indexing into arrays. This
@@ -93,7 +97,7 @@ Finally, we want to generate code that increments the loop variables
 in the topological order. Typically, the topological order isn't the
 order of the variables in the program.
 
-Sppedus of 10–16x can result from switching to the topological order. On a
+Speedups of 10–16x can result from switching to the topological order. On a
 matrix multiplication routine, loop permutation creates speedups of about 16x
 and results in slightly faster code than equivalent C compiled by LLVM 16
 (which does not do loop permutation).
@@ -104,10 +108,8 @@ and results in slightly faster code than equivalent C compiled by LLVM 16
 Our first step is detecting tensor contraction expressions. Formally,
 tensor contractions must match these rules:
 
-- It is an `array` loop, whose loop bounds are integers or constant
-  propagate to integers;
-- Whose body is a `sum` loop, whose loop bounds are also integers or
-  constant propagate to integers;
+- It is an `array` loop;
+- Whose body is a `sum` loop;
 - Whose body matches the following grammar for tensor contractions (`tc`):
 
 ```
@@ -120,6 +122,9 @@ tc_body : <tc_body> <binop> <tc_body>
         | <tc_primitive>
 
 tc_primitive : <integer> | <float> | <variable>
+
+// floating-point binops
+binop : + | - | * | / | % 
 ```
 
 Implementation suggestions in: [hints.md](./hints.md).
