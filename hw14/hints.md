@@ -21,12 +21,6 @@ boolean flags. For example, your `visit_int_expr`, `visit_float_expr`, and
 `visit_binop_expr` and `visit_array_index_expr` methods should set
 `is_tc_body`; and so on.
 
-Note that, when setting `tc` and `tc_sum`, you need to check that the
-loop bounds are integers. You should also allow them to be expression
-that constant-propagate to an integer. For this to work, you'll need
-to make sure to run the `TensorContraction` after you run the
-`ConstantPropagation`.
-
 To debug this step, we recommend adding a print statement in all of
 the `TensorContraction` methods that set the various fields. Once it
 works, you should be able to detect 1 tensor contraction in each of

@@ -110,12 +110,12 @@ tensor contractions must match these rules:
 
 - It is an `array` loop;
 - Whose body is a `sum` loop;
-- Whose body matches the following grammar for tensor contractions (`tc`):
+- Whose body returns a Float and matches the following grammar for tensor contraction bodies (`tc_body`):
 
 ```
-tc : array [ <variable> : <integer> , ... ] <tc_sum>
+tc : array [ <variable> : <tc_primitive> , ... ] <tc_sum>
 
-tc_sum : sum [ <variable> : <integer> , ... ] <tc_body>
+tc_sum : sum [ <variable> : <tc_primitive> , ... ] <tc_body>
 
 tc_body : <tc_body> <binop> <tc_body>
         | <tc_primitive> [ <tc_primitive> , ... ]
