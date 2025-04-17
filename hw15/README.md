@@ -52,7 +52,7 @@ expr : - <expr>
      | <expr> != <expr>
      | <expr> <= <expr>
      | <expr> >= <expr>
-     | <variable> { <expr> , ... }
++    | <variable> { <expr> , ... }
      | [ <expr> , ... ]
      | <expr> [ <expr> , ... ]
 +    | <expr> . <variable>
