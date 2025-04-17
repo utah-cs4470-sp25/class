@@ -77,16 +77,16 @@ There are 6 test folders:
 
 For Part 3, we will run your code once with `-s` and once with `-s -O3`:
 
-   make run TEST=/grader/ok/001.jpl FLAGS=-s
-   make run TEST=/grader/ok/001.jpl FLAGS="-s -O3"
+    make run TEST=/grader/ok/001.jpl FLAGS=-s
+    make run TEST=/grader/ok/001.jpl FLAGS="-s -O3"
 
 For Part 4 (`fail-fuzzer1`), we will only typecheck. The programs should all fail:
 
-   make run TEST=/grader/ok/001.jpl FLAGS=-t
+    make run TEST=/grader/ok/001.jpl FLAGS=-t
 
 For the other parts, we will run your code with the `-s` flag:
 
-   make run TEST=/grader/ok/001.jpl FLAGS=-s
+    make run TEST=/grader/ok/001.jpl FLAGS=-s
 
 You can run all tests by downloading the auto-grader and running this command:
 
