@@ -2,6 +2,8 @@ Assignment 15: More ASM
 =======================
 
 Compile the full JPL language to x86_64.
+
+Slides: <https://utah.instructure.com/courses/1021427/pages/03-slash-19-slides-+-notes-asm-codegen>
  
 ```diff
 cmd : show <expr>
