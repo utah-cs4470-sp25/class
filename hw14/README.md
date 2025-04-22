@@ -202,6 +202,8 @@ Code generation should go through the following steps:
     does that for you.
 - Save the allocated pointer to the stack in the correct place
 - Push a `0` onto the stack *for each of the array and sum variables*.
+  + Initialize the array variables first, then the sum variables. Both groups of variables must
+    be initialized in reverse (right-to-left) order, like normal.
 - Begin the loop
 - Compute the body of the **sum** loop
 - Compute the pointer into the array using *only the array indices*.
