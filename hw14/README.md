@@ -7,6 +7,8 @@ Add a loop permutation pass to your compiler.
 
 **April 16:** do not implement constant propagation. Pavel says it wasn't needed in the first place. Sorry!
 
+**April 28:** loop bodies can compute ints or floats (not just floats; `crs` uses ints)
+
 There are 5 test programs:
 
 - `col`: columnar sum routine
@@ -52,7 +54,7 @@ Every *indexing pair* of two variables forms an edge. Indexing pairs
 
 - An array index expression `A[..., i, ..., j, ...]`
 - An array loop expression  `array[..., i : ..., ..., j : ..., ...] ...`
-- A sum loop expression `sum[..., i : ..., ..., j : ..., ...] ...`,
+- A sum loop expression `sum[..., i : ..., ..., j : ..., ...] ...`
   but **only** if the sum is summing floating-point numbers.
 
 The basic idea of this graph is that an indexing pair (`i`, `j`) means
@@ -110,7 +112,7 @@ tensor contractions must match these rules:
 
 - It is an `array` loop;
 - Whose body is a `sum` loop;
-- Whose body returns a Float and matches the following grammar for tensor contraction bodies (`tc_body`):
+- Whose body returns a number and matches the following grammar for tensor contraction bodies (`tc_body`):
 
 ```
 tc : array [ <variable> : <tc_primitive> , ... ] <tc_sum>
@@ -123,7 +125,7 @@ tc_body : <tc_body> <binop> <tc_body>
 
 tc_primitive : <integer> | <float> | <variable>
 
-// floating-point binops
+// numeric binops
 binop : + | - | * | / | % 
 ```
 
