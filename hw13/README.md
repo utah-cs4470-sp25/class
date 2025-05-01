@@ -10,7 +10,7 @@ Add the following optimizations to your compiler:
    + **April 8**: multiplication (`*`) by 1 (`2^0`) must produce no output
    + **April 9**: but, when generating array indices, always output a `shl` even if shifting by `0`
  - P5. Reducing array copies for indexing (`ok5`)
-   + **April 8**: instead of popping indices one-by-one HW12 style, you must pop all with one `sub rsp _` instruction
+   + **April 8**: instead of popping indices one-by-one HW12 style, you must pop all with one `add rsp _` instruction
 
 **April 8**: the 5 parts of this assignment are NOT independent. Parts 3 and 4
 depend on one another. There may be other dependencies.
@@ -303,8 +303,8 @@ pointer out of whereever the array is located on the stack, even if
 it's not at the top of the stack.
 
 (Added **April 8**) In addition, when you pop indices after the array access,
-you must pop all at once instead of outputting several `sub rsp _` instructions.
-Calculate the total SPACE to free and output one instruction: `sub rsp SPACE`.
+you must pop all at once instead of outputting several `add rsp _` instructions.
+Calculate the total SPACE to free and output one instruction: `add rsp SPACE`.
 
 > More detail on the `GAP` computation: Imagine an array of rank `R`. Without
 > optimization, the array is copied to the top of the stack, and then `R`
